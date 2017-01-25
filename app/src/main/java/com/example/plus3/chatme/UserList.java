@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserList extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -28,7 +29,7 @@ public class UserList extends AppCompatActivity {
     private DatabaseReference databaseReference;
     ListView listView;
     ArrayList<String> list= new ArrayList<String>();
-    ArrayList<String> piclist = new ArrayList<String>();
+    List<Integer> piclist = new ArrayList<Integer>();
     ArrayAdapter<String> adapter;
     String CURRENT_USER;
     String USER_NAME;
@@ -71,7 +72,7 @@ public class UserList extends AppCompatActivity {
         final Intent intent = getIntent();
         CURRENT_USER = intent.getStringExtra("UID");
         getCurrentUserName();
-        CustomListAdapter adapter= new CustomListAdapter(this,list,piclist);
+        CustomListAdapter adapterr= new CustomListAdapter(this,list,piclist);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
