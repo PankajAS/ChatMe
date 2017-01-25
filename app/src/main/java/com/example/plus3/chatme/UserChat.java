@@ -91,6 +91,7 @@ public class UserChat extends AppCompatActivity {
                    if(dataChild.getKey().equals("body")){
                        msg = dataChild.getValue().toString();
                        System.out.println(msg);
+
                    }
                }
                if(msg!=null){
