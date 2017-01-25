@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">Chat Me</string>
+    <string name="app_name">LetsTalk</string>
+    <string name="loginError">Please enter user name &amp; password</string>
+    <string name="signupSuccess">Sign up Successful</string>
+    <string name="signupError">Please fill required fields!</string>
 </resources>

@@ -32,29 +32,37 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     public void login(View view){
-        String emaiil = email.getText().toString();
+        String email = this.email.getText().toString();
         String passwords = password.getText().toString();
-        progressBar.setVisibility(View.VISIBLE);
 
-        auth.signInWithEmailAndPassword(emaiil,passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        if(!email.isEmpty() && !passwords.isEmpty()) {
 
-                        if(task.isSuccessful()){
-                            String id = task.getResult().getUser().getUid().toString();
-                            Intent intent = new Intent(getApplicationContext(),UserList.class);
-                            if(id!=null){
-                                userId=id;
-                                intent.putExtra("UID",userId);
-                                finish();
-                                startActivity(intent);
-                            }
-                        }else{
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getApplicationContext(),task.getException().toString().substring(task.getException().toString().indexOf(" ")),Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.VISIBLE);
+
+            auth.signInWithEmailAndPassword(email, passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if (task.isSuccessful()) {
+                        String id = task.getResult().getUser().getUid().toString();
+                        Intent intent = new Intent(getApplicationContext(), UserList.class);
+                        if (id != null) {
+                            userId = id;
+                            intent.putExtra("UID", userId);
+                            finish();
+                            startActivity(intent);
                         }
-            }
-        });
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), task.getException().toString().substring(task.getException().toString().indexOf(" ")), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), R.string.loginError,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void signUp(View view){

@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="31dp"
         android:id="@+id/email"
-        android:hint="Email"
+        android:hint=" email / mobile"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -55,7 +55,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyle"

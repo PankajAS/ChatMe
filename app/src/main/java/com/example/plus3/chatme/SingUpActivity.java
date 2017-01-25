@@ -26,17 +26,20 @@ public class SingUpActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     public void signUp(View v){
-        progressBar.setVisibility(View.VISIBLE);
-        String uemail = email.getText().toString();
-        String upassword = password.getText().toString();
+       if(!name.getText().toString().isEmpty() && !phone.getText().toString().isEmpty()
+                && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
 
-        auth.createUserWithEmailAndPassword(uemail, upassword).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    String id = task.getResult().getUser().getUid().toString();
+           progressBar.setVisibility(View.VISIBLE);
+           String uemail = email.getText().toString();
+           String upassword = password.getText().toString();
 
-                     if (id != null) {
+            auth.createUserWithEmailAndPassword(uemail, upassword).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        String id = task.getResult().getUser().getUid().toString();
+
+                        if (id != null) {
 
                             myRef = database.getReference("Users").child(id).child("Details");
                             myRef.child("Name").setValue(name.getText().toString());
@@ -45,20 +48,25 @@ public class SingUpActivity extends AppCompatActivity {
                             myRef.child("Passwords").setValue(password.getText().toString());
                             myRef.child("UID").setValue(id);
                         }
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    intent.putExtra("UID",id);
-                    startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("UID", id);
+                        startActivity(intent);
 
-                    Toast.makeText(getApplicationContext(),"Sign up Successful",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.signupSuccess, Toast.LENGTH_SHORT).show();
 
-                } else {
-                    String msg;
-                    msg = task.getException().toString().substring(task.getException().toString().indexOf(" "));
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    } else {
+                        String msg;
+                        msg = task.getException().toString().substring(task.getException().toString().indexOf(" "));
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
+                    }
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), R.string.signupError,Toast.LENGTH_LONG).show();
+        }
 
     }
 
