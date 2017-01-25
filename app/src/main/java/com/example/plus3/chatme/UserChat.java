@@ -89,9 +89,9 @@ public class UserChat extends AppCompatActivity {
                System.out.println(data.getKey());
                for(DataSnapshot dataChild:data.getChildren()){
                    if(dataChild.getKey().equals("body")){
+
                        msg = dataChild.getValue().toString();
                        System.out.println(msg);
-
                    }
                }
                if(msg!=null){
