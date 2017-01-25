@@ -93,6 +93,7 @@ public class UserChat extends AppCompatActivity {
                        msg = dataChild.getValue().toString();
                        System.out.println(msg);
 
+
                    }
                }
                if(msg!=null){
