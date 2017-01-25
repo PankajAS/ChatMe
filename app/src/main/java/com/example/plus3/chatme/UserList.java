@@ -1,6 +1,9 @@
 package com.example.plus3.chatme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -19,6 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,6 +141,39 @@ public class UserList extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    //Class for image download
+    public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+
+            try {
+                URL url = new URL(urls[0]);
+                URLConnection urlConnection = url.openConnection();
+                HttpURLConnection httpURLConnection = null;
+
+                if(urlConnection instanceof HttpURLConnection){
+                    httpURLConnection = (HttpURLConnection) urlConnection;
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+
+                    Bitmap myImage = BitmapFactory.decodeStream(inputStream);
+                    return myImage;
+                }
+            }
+            catch (MalformedURLException e) {
+                e.printStackTrace();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
     }
 
     @Override
