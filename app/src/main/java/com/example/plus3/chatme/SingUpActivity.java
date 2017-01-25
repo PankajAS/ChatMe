@@ -37,6 +37,7 @@ public class SingUpActivity extends AppCompatActivity {
                     String id = task.getResult().getUser().getUid().toString();
 
                      if (id != null) {
+
                             myRef = database.getReference("Users").child(id).child("Details");
                             myRef.child("Name").setValue(name.getText().toString());
                             myRef.child("Phone").setValue(phone.getText().toString());
