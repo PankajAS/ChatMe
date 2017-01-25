@@ -16,6 +16,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         this.context = context1;
         this.itemname = itemname;
         this.imgid = imgid;
+
     }
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
