@@ -28,6 +28,7 @@ public class UserList extends AppCompatActivity {
     private DatabaseReference databaseReference;
     ListView listView;
     ArrayList<String> list= new ArrayList<String>();
+    ArrayList<String> piclist = new ArrayList<String>();
     ArrayAdapter<String> adapter;
     String CURRENT_USER;
     String USER_NAME;
@@ -70,6 +71,7 @@ public class UserList extends AppCompatActivity {
         final Intent intent = getIntent();
         CURRENT_USER = intent.getStringExtra("UID");
         getCurrentUserName();
+        CustomListAdapter adapter= new CustomListAdapter(this,list,piclist);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
