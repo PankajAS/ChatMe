@@ -72,7 +72,7 @@ public class UserList extends AppCompatActivity {
         final Intent intent = getIntent();
         CURRENT_USER = intent.getStringExtra("UID");
         getCurrentUserName();
-        CustomListAdapter adapterr= new CustomListAdapter(this,list,piclist);
+        //CustomListAdapter adapterr= new CustomListAdapter(this,list,piclist);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

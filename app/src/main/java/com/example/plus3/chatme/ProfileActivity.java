@@ -1,17 +1,5 @@
 package com.example.plus3.chatme;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.TextView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-//imports to open media
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,25 +8,36 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Menu;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+//imports to open media
+
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    DatabaseReference savedata;
 
     ImageView viewImage;
 
@@ -52,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         myRef = database.getReference("Users");
         final Intent intent = getIntent();
+        savedata = myRef.child(intent.getStringExtra("UID")).child("Details");
         final TextView textView = (TextView)findViewById(R.id.profileName);
 
         viewImage = (ImageView)findViewById(R.id.imageView);
@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
                     File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(intent, 1);
+
                 }
                 else if (options[item].equals("Choose from Gallery"))
                 {
@@ -130,6 +131,16 @@ public class ProfileActivity extends AppCompatActivity {
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
+                    Bitmap bit = BitmapFactory.decodeFile(file.getPath(), options);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bytes = baos.toByteArray();
+                    String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    savedata.child("Photo").setValue(base64Image);
+
+
                     try {
                         outFile = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
@@ -155,7 +166,17 @@ public class ProfileActivity extends AppCompatActivity {
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                 //Log.w("path of image from gallery......******************.........", picturePath+"");
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
+                Bitmap bit = BitmapFactory.decodeFile(selectedImage.getPath(), options);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] bytes = baos.toByteArray();
+                String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+                savedata.child("Photo").setValue(base64Image);
                 viewImage.setImageBitmap(thumbnail);
+
             }
         }
     }
