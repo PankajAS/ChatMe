@@ -3,7 +3,6 @@ package com.example.plus3.chatme;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -61,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+
 
         myRef.child(intent.getStringExtra("UID")).child("Details").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -156,26 +156,35 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (requestCode == 2) {
+            } else if (requestCode == 2 && data != null) {
+
                 Uri selectedImage = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    viewImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                //Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+                //Cursor cursor = getContentResolver().query(selectedImage, filePath, null, null, null);
+               // cursor.moveToFirst();
+                //int columnIndex = cursor.getColumnIndex(filePath[0]);
+                //String picturePath = cursor.getString(columnIndex);
+               // cursor.close();
+               // Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                 //Log.w("path of image from gallery......******************.........", picturePath+"");
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
+                options.inSampleSize = 8; //shrink it down otherwise we will use stupid amounts of memory
                 Bitmap bit = BitmapFactory.decodeFile(selectedImage.getPath(), options);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] bytes = baos.toByteArray();
                 String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
                 savedata.child("Photo").setValue(base64Image);
-                viewImage.setImageBitmap(thumbnail);
+              //  viewImage.setImageBitmap(thumbnail);
 
             }
         }
