@@ -1,16 +1,14 @@
 package com.example.plus3.chatme;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,13 +19,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import android.database.Cursor;
+import android.widget.Toast;
+import android.Manifest;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+
 
 //imports to open media
 
@@ -37,8 +33,11 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     DatabaseReference savedata;
-
+    private static final int REQUEST_WRITE_STORAGE = 1;
     ImageView viewImage;
+
+    private static int RESULT_LOAD_IMG = 1;
+    String imgDecodableString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +53,11 @@ public class ProfileActivity extends AppCompatActivity {
         final TextView textView = (TextView)findViewById(R.id.profileName);
 
         viewImage = (ImageView)findViewById(R.id.imageView);
+
         viewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                openGallery(v);
             }
         });
 
@@ -78,115 +78,80 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    startActivityForResult(intent, 1);
+    public void openGallery(View view) {
+        boolean hasPermission = (ContextCompat.checkSelfPermission(ProfileActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(ProfileActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }
+        else
+        {
+            selectImage();
+        }
+    }
 
-                }
-                else if (options[item].equals("Choose from Gallery"))
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-                }
-                else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
+                    selectImage();
+
+                } else
+                {
+                    Toast.makeText(ProfileActivity.this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                 }
             }
-        });
-        builder.show();
+        }
+    }
+
+    private void selectImage() {
+        //reload my activity with permission granted or use the features what required the permission
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                File f = new File(Environment.getExternalStorageDirectory().toString());
-                for (File temp : f.listFiles()) {
-                    if (temp.getName().equals("temp.jpg")) {
-                        f = temp;
-                        break;
-                    }
-                }
-                try {
-                    Bitmap bitmap;
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                            bitmapOptions);
-                    viewImage.setImageBitmap(bitmap);
-                    String path = android.os.Environment
-                            .getExternalStorageDirectory()
-                            + File.separator
-                            + "Phoenix" + File.separator + "default";
-                    f.delete();
-                    OutputStream outFile = null;
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
-                    Bitmap bit = BitmapFactory.decodeFile(file.getPath(), options);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] bytes = baos.toByteArray();
-                    String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    savedata.child("Photo").setValue(base64Image);
-
-
-                    try {
-                        outFile = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-                        outFile.flush();
-                        outFile.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (requestCode == 2 && data != null) {
+        try {
+            // When an Image is picked
+            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
 
                 Uri selectedImage = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                    viewImage.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                //Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
-                //Cursor cursor = getContentResolver().query(selectedImage, filePath, null, null, null);
-               // cursor.moveToFirst();
-                //int columnIndex = cursor.getColumnIndex(filePath[0]);
-                //String picturePath = cursor.getString(columnIndex);
-               // cursor.close();
-               // Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                //Log.w("path of image from gallery......******************.........", picturePath+"");
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8; //shrink it down otherwise we will use stupid amounts of memory
-                Bitmap bit = BitmapFactory.decodeFile(selectedImage.getPath(), options);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bit.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] bytes = baos.toByteArray();
-                String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
-                savedata.child("Photo").setValue(base64Image);
-              //  viewImage.setImageBitmap(thumbnail);
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                // Set the Image in ImageView after decoding the String
+                viewImage.setImageBitmap(BitmapFactory
+                        .decodeFile(imgDecodableString));
 
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
         }
+
     }
 }
