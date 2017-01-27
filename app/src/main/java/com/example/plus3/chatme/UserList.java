@@ -32,6 +32,7 @@ public class UserList extends AppCompatActivity {
     ListView listView;
     ArrayList<String> list= new ArrayList<String>();
     ArrayList<Bitmap> piclist = new ArrayList<>();
+    ArrayList<String> userKeys;
     ArrayAdapter<String> adapter;
     String CURRENT_USER;
     String USER_NAME;
@@ -76,6 +77,7 @@ public class UserList extends AppCompatActivity {
         getCurrentUserName();
         final CustomListAdapter adapterr = new CustomListAdapter(this,list,piclist);
         listView.setAdapter(adapterr);
+        userKeys  = new ArrayList<>();
 
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -84,7 +86,11 @@ public class UserList extends AppCompatActivity {
 
                 for(DataSnapshot data1:dataSnapshot.getChildren()){
 
-                    for(DataSnapshot dataSnapshot1:data1.getChildren()){
+                    userKeys.add(data1.getKey().toString());
+                    System.out.println(userKeys);
+
+                  for(DataSnapshot dataSnapshot1:data1.getChildren()){
+
                     for(DataSnapshot dataSnapshot2:dataSnapshot1.getChildren()) {
 
                         if(dataSnapshot2.getKey().equals("Name") && !dataSnapshot2.getValue().equals(USER_NAME)){
@@ -92,19 +98,16 @@ public class UserList extends AppCompatActivity {
                         }
 
                         if(dataSnapshot2.getKey().equals("pic") && !dataSnapshot2.getValue().equals(USER_NAME)){
-
                             String base64Image = (String) dataSnapshot2.getValue();
                             byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
                             Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
                             piclist.add(image);
-                            System.out.println(piclist);
                             adapterr.notifyDataSetChanged();
-                        }
+                       }
                    }
                  }
                }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -116,29 +119,10 @@ public class UserList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot data:dataSnapshot.getChildren()){
-                            for (DataSnapshot data2:data.getChildren()){
-                                for(DataSnapshot data3:data2.getChildren()){
-                                    if(data3.getValue().equals(list.get(i))){
-                                        Intent intent = new Intent(getApplicationContext(),UserChat.class);
-                                        intent.putExtra("ChatUser",data.getKey().toString());
-                                        intent.putExtra("CurrentUser",CURRENT_USER);
-                                        startActivity(intent);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                Intent intent = new Intent(getApplicationContext(),UserChat.class);
+                intent.putExtra("ChatUser", userKeys.get(i));
+                intent.putExtra("CurrentUser", CURRENT_USER);
+                startActivity(intent);
             }
         });
     }

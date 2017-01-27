@@ -20,18 +20,15 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         this.context = context;
         this.itemname = itemname;
         this.imgid = imgid;
-
     }
 
+    @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.userlist, null ,true);
 
        TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-
-        System.out.println("Hello");
-
+       ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
 
         txtTitle.setText(itemname.get(position));
         imageView.setImageBitmap(imgid.get(position));
@@ -39,8 +36,4 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         return rowView;
 
     }
-
-
-
-    ;
 }
