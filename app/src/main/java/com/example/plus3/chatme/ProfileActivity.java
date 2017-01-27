@@ -1,7 +1,10 @@
 package com.example.plus3.chatme;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,9 +12,11 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -19,10 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import android.database.Cursor;
-import android.widget.Toast;
-import android.Manifest;
 
+import java.io.ByteArrayOutputStream;
 
 
 //imports to open media
@@ -39,6 +42,21 @@ public class ProfileActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
 
+    private void previewStoredFirebaseImage() {
+        savedata.child("pic").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String base64Image = (String) snapshot.getValue();
+                byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                viewImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length)
+                );
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
         final TextView textView = (TextView)findViewById(R.id.profileName);
 
         viewImage = (ImageView)findViewById(R.id.imageView);
+
+        previewStoredFirebaseImage();
 
         viewImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +163,16 @@ public class ProfileActivity extends AppCompatActivity {
                 // Set the Image in ImageView after decoding the String
                 viewImage.setImageBitmap(BitmapFactory
                         .decodeFile(imgDecodableString));
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
+                Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString, options);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] bytes = baos.toByteArray();
+                String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+                // we finally have our base64 string version of the image, save it.
+                savedata.child("pic").setValue(base64Image);
+
 
             } else {
                 Toast.makeText(this, "You haven't picked Image",
