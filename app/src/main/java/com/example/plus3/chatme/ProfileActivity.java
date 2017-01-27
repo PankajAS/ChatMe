@@ -43,18 +43,24 @@ public class ProfileActivity extends AppCompatActivity {
     String imgDecodableString;
 
     private void previewStoredFirebaseImage() {
-        savedata.child("pic").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                String base64Image = (String) snapshot.getValue();
-                byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
-                viewImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length)
-                );
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
 
-        });
+
+            savedata.child("pic").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+
+                        String base64Image = (String) snapshot.getValue();
+                        byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                        Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                        viewImage.setImageBitmap(image);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+
+            });
+
     }
 
     @Override

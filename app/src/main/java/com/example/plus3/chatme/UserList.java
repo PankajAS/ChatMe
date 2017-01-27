@@ -1,8 +1,11 @@
 package com.example.plus3.chatme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserList extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -29,7 +31,7 @@ public class UserList extends AppCompatActivity {
     private DatabaseReference databaseReference;
     ListView listView;
     ArrayList<String> list= new ArrayList<String>();
-    List<Integer> piclist = new ArrayList<Integer>();
+    ArrayList<Bitmap> piclist = new ArrayList<>();
     ArrayAdapter<String> adapter;
     String CURRENT_USER;
     String USER_NAME;
@@ -65,14 +67,16 @@ public class UserList extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.userList);
         listData = listData.getInstance();
         databaseReference = listData.getReference("Users");
-        adapter = new ArrayAdapter<String>(this,R.layout.userlist,R.id.textView1,list);
-        listView.setAdapter(adapter);
+        //adapter = new ArrayAdapter<String>(this,R.layout.userlist,R.id.textView1,list);
+        //listView.setAdapter(adapter);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         final Intent intent = getIntent();
         CURRENT_USER = intent.getStringExtra("UID");
         getCurrentUserName();
-        //CustomListAdapter adapterr= new CustomListAdapter(this,list,piclist);
+        final CustomListAdapter adapterr = new CustomListAdapter(this,list,piclist);
+        listView.setAdapter(adapterr);
+
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -87,7 +91,15 @@ public class UserList extends AppCompatActivity {
                             list.add(dataSnapshot2.getValue().toString());
                         }
 
-                       adapter.notifyDataSetChanged();
+                        if(dataSnapshot2.getKey().equals("pic") && !dataSnapshot2.getValue().equals(USER_NAME)){
+
+                            String base64Image = (String) dataSnapshot2.getValue();
+                            byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                            Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                            piclist.add(image);
+                            System.out.println(piclist);
+                            adapterr.notifyDataSetChanged();
+                        }
                    }
                  }
                }
@@ -108,12 +120,8 @@ public class UserList extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot data:dataSnapshot.getChildren()){
-
                             for (DataSnapshot data2:data.getChildren()){
-
-
                                 for(DataSnapshot data3:data2.getChildren()){
-
                                     if(data3.getValue().equals(list.get(i))){
                                         Intent intent = new Intent(getApplicationContext(),UserChat.class);
                                         intent.putExtra("ChatUser",data.getKey().toString());
