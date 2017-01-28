@@ -3,6 +3,7 @@ package com.example.plus3.chatme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -67,6 +68,8 @@ public class UserChat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_chat);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         editText = (EditText) findViewById(R.id.textmsg);
         listView = (ListView) findViewById(R.id.msgs);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
@@ -80,33 +83,42 @@ public class UserChat extends AppCompatActivity {
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
 
         //Chat Messages
-        databaseReference.child("Inbox").addValueEventListener(new ValueEventListener(){
+        databaseReference.child("Inbox").addValueEventListener(new ValueEventListener() {
 
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               String msg = null;
-           for(DataSnapshot data:dataSnapshot.getChildren()){
-               System.out.println(data.getKey());
-               for(DataSnapshot dataChild:data.getChildren()){
-                   if(dataChild.getKey().equals("body")){
-                       msg = dataChild.getValue().toString();
-                       System.out.println(msg);
-                   }
-               }
-               if(msg!=null){
-               arrayList.add(msg);}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String msg = null;
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    System.out.println(data.getKey());
+                    for (DataSnapshot dataChild : data.getChildren()) {
+                        if (dataChild.getKey().equals("body")) {
+                            msg = dataChild.getValue().toString();
+                            System.out.println(msg);
+                        }
+                    }
+                    if (msg != null) {
+                        arrayList.add(msg);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
 
-           }
-               adapter.notifyDataSetChanged();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-           }
+            }
+        });
+    }
 
-          @Override
-          public void onCancelled(DatabaseError databaseError) {
-
-          }
-      });
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            //overridePendingTransition(R.transition.stay, R.transition.slide_down);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
+
 
