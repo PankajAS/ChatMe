@@ -29,6 +29,7 @@ public class UserList extends AppCompatActivity {
     private FirebaseDatabase listData;
     private FirebaseUser user;
     private DatabaseReference databaseReference;
+    Utils utils;
     ListView listView;
     ArrayList<String> list= new ArrayList<String>();
     ArrayList<Bitmap> piclist = new ArrayList<>();
@@ -65,6 +66,7 @@ public class UserList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         setTitle("User List");
+        utils = new Utils();
         listView = (ListView)findViewById(R.id.userList);
         listData = listData.getInstance();
         databaseReference = listData.getReference("Users");
@@ -101,7 +103,7 @@ public class UserList extends AppCompatActivity {
                             String base64Image = (String) dataSnapshot2.getValue();
                             byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
                             Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-                            piclist.add(image);
+                            piclist.add(utils.getCircularImage(image));
                             adapterr.notifyDataSetChanged();
                        }
                    }
