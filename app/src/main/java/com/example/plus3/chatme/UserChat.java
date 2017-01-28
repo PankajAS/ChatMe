@@ -3,11 +3,10 @@ package com.example.plus3.chatme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -30,6 +29,20 @@ public class UserChat extends AppCompatActivity {
     private ArrayList<String> arrayList = new ArrayList<String>();
     private ListView listView;
     private ArrayAdapter<String> adapter;
+    ChatArrayAdapter chatArrayAdapter;
+    private boolean side = false;
+    Button button;
+
+    public class ChatMessage {
+        public boolean left;
+        public String message;
+
+        public ChatMessage(boolean left, String message) {
+            super();
+            this.left = left;
+            this.message = message;
+        }
+    }
 
 
     public void sendMsg(View v) {
@@ -65,24 +78,40 @@ public class UserChat extends AppCompatActivity {
         editText.setText("");
     }
 
+    private boolean sendChatMessage() {
+        chatArrayAdapter.add(new ChatMessage(side, editText.getText().toString()));
+        editText.setText("");
+        side = !side;
+        return true;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         editText = (EditText) findViewById(R.id.textmsg);
         listView = (ListView) findViewById(R.id.msgs);
+        button = (Button)findViewById(R.id.send);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-        listView.setAdapter(adapter);
-        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         database = database.getInstance();
         final Intent intent = getIntent();
         Intent intent2 = getIntent();
-        setTitle(intent2.getStringExtra("ChatUser"));
+        setTitle(intent2.getStringExtra("UserName"));
         databaseReference = database.getReference("Users").child(intent.getStringExtra("CurrentUser")).child("Messages").child(intent.getStringExtra("ChatUser"));
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
+        chatArrayAdapter= new ChatArrayAdapter(getApplicationContext(),R.layout.right);
+        listView.setAdapter(chatArrayAdapter);
+        //listView.setAdapter(adapter);
+        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                sendChatMessage();
+            }
+        });
 
         //Chat Messages
         databaseReference.child("Inbox").addValueEventListener(new ValueEventListener() {
@@ -98,6 +127,7 @@ public class UserChat extends AppCompatActivity {
                             System.out.println(msg);
                         }
                     }
+
                     if (msg != null) {
                         arrayList.add(msg);
                     }

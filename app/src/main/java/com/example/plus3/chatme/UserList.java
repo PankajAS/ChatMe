@@ -89,7 +89,6 @@ public class UserList extends AppCompatActivity {
                 for(DataSnapshot data1:dataSnapshot.getChildren()){
 
                     userKeys.add(data1.getKey().toString());
-                    System.out.println(userKeys);
 
                   for(DataSnapshot dataSnapshot1:data1.getChildren()){
 
@@ -123,6 +122,7 @@ public class UserList extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(),UserChat.class);
                 intent.putExtra("ChatUser", userKeys.get(i));
+                intent.putExtra("UserName", list.get(i));
                 intent.putExtra("CurrentUser", CURRENT_USER);
                 startActivity(intent);
             }

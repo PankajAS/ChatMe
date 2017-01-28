@@ -10,6 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.plus3.chatme.UserChat">
 
+
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="425dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/msgs"
+        android:layout_above="@+id/textmsg" />
+
     <EditText
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -21,24 +33,15 @@
         android:hint="Text....."
         android:layout_width="280dp" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="425dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/msgs"
-        android:layout_above="@+id/textmsg" />
-
     <Button
         android:text=">>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/send"
-        android:onClick="sendMsg"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textmsg" />
+        android:layout_toEndOf="@+id/textmsg"
+        android:layout_toRightOf="@+id/textmsg" />
 
 </RelativeLayout>
