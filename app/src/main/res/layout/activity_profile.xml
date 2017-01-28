@@ -37,45 +37,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Mobile"
         android:ems="10"
         android:layout_marginTop="15dp"
         android:id="@+id/txtMobile"
-        android:layout_below="@+id/editText4"
+        android:layout_below="@+id/txtEmail"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/editText4"
-        android:layout_alignEnd="@+id/editText4" />
+        android:layout_alignRight="@+id/txtEmail"
+        android:layout_alignEnd="@+id/txtEmail"
+        android:hint="mobile" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
-        android:id="@+id/editText3"
+        android:id="@+id/txtName"
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="21dp" />
+        android:layout_marginTop="21dp"
+        android:hint="name" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Email"
         android:ems="10"
-        android:id="@+id/editText4"
-        android:layout_below="@+id/editText3"
+        android:id="@+id/txtEmail"
+        android:layout_below="@+id/txtName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="13dp"
+        android:hint="email" />
 
     <Button
         android:text="Update Info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button4"
+        android:id="@+id/btnProfile"
         android:layout_below="@+id/txtMobile"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

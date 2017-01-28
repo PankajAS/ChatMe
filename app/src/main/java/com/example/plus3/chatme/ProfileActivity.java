@@ -13,10 +13,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.io.ByteArrayOutputStream;
-
+import android.graphics.drawable.BitmapDrawable;
 
 //imports to open media
 
@@ -40,29 +38,17 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     DatabaseReference savedata;
     private static final int REQUEST_WRITE_STORAGE = 1;
+    Intent intent;
     ImageView viewImage;
+    Button btnProfile;
+    TextView profileName;
+    TextView txtName;
+    TextView txtEmail;
+    TextView txtMobile;
+
     Utils utils;
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
-
-    private void previewStoredFirebaseImage() {
-            savedata.child("pic").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-
-                        String base64Image = (String) snapshot.getValue();
-                        byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
-                        Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-                        viewImage.setImageBitmap(utils.getCircularImage(image));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-
-            });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,39 +61,66 @@ public class ProfileActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         myRef = database.getReference("Users");
-        final Intent intent = getIntent();
+        intent = getIntent();
         savedata = myRef.child(intent.getStringExtra("UID")).child("Details");
-        final TextView textView = (TextView)findViewById(R.id.profileName);
 
+        profileName = (TextView)findViewById(R.id.profileName);
+        txtName = (TextView)findViewById(R.id.txtName);
+        txtEmail = (TextView)findViewById(R.id.txtEmail);
+        txtMobile = (TextView)findViewById(R.id.txtMobile);
         viewImage = (ImageView)findViewById(R.id.imageView);
+        btnProfile = (Button) findViewById(R.id.btnProfile);
 
-        previewStoredFirebaseImage();
-
+        populateProfileInfo();
+        //onclick handeler of profile image
         viewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(v);
+                openGallery();
             }
         });
 
+        //onclick handeler of UPDATE profile button
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateProfileInfo();
+            }
+        });
 
+    }
+
+    private void populateProfileInfo() {
         myRef.child(intent.getStringExtra("UID")).child("Details").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data:dataSnapshot.getChildren()){
                     if(data.getKey().equals("Name")) {
-                        textView.setText(data.getValue().toString());
+                        profileName.setText(data.getValue().toString());
+                        txtName.setText(data.getValue().toString());
+                    }
+                    else if(data.getKey().equals("Email")) {
+                        txtEmail.setText(data.getValue().toString());
+                    }
+                    else if(data.getKey().equals("Phone")) {
+                        txtMobile.setText(data.getValue().toString());
+                    }else if(data.getKey().equals("pic")) {
+                        String base64Image = (String) data.getValue();
+                        byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                        Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                        viewImage.setImageBitmap(utils.getCircularImage(image));
                     }
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG)
+                        .show();
             }
         });
     }
 
-    public void openGallery(View view) {
+    private void openGallery() {
         boolean hasPermission = (ContextCompat.checkSelfPermission(ProfileActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         if (!hasPermission) {
@@ -119,6 +132,15 @@ public class ProfileActivity extends AppCompatActivity {
         {
             selectImage();
         }
+    }
+
+    private void selectImage() {
+        //reload my activity with permission granted or use the features what required the permission
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
     @Override
@@ -137,15 +159,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private void selectImage() {
-        //reload my activity with permission granted or use the features what required the permission
-        // Create intent to Open Image applications like Gallery, Google Photos
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // Start the Intent
-        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
     @Override
@@ -172,17 +185,6 @@ public class ProfileActivity extends AppCompatActivity {
                 // Set the Image in ImageView after decoding the String
                 viewImage.setImageBitmap(utils.getCircularImage(BitmapFactory.decodeFile(imgDecodableString)));
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
-                Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString, options);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] bytes = baos.toByteArray();
-                String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
-                // we finally have our base64 string version of the image, save it.
-                savedata.child("pic").setValue(base64Image);
-
-
             } else {
                 Toast.makeText(this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
@@ -191,6 +193,26 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
+    }
+
+    private void updateProfileInfo() {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
+        Bitmap bitmap = ((BitmapDrawable)viewImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+        // we finally have our base64 string version of the image, save it.
+        savedata.child("pic").setValue(base64Image);
+
+        savedata.child("Name").setValue(txtName.getText().toString());
+        savedata.child("Phone").setValue(txtMobile.getText().toString());
+        savedata.child("Email").setValue(txtEmail.getText().toString());
+
+        Toast.makeText(this, R.string.profileUpdateMsg, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
