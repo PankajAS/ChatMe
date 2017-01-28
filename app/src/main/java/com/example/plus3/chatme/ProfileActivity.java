@@ -13,6 +13,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,13 +41,11 @@ public class ProfileActivity extends AppCompatActivity {
     DatabaseReference savedata;
     private static final int REQUEST_WRITE_STORAGE = 1;
     ImageView viewImage;
-
+    Utils utils;
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
 
     private void previewStoredFirebaseImage() {
-
-
             savedata.child("pic").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
@@ -52,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
                         String base64Image = (String) snapshot.getValue();
                         byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
                         Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-                        viewImage.setImageBitmap(image);
+                        viewImage.setImageBitmap(utils.getCircularImage(image));
                 }
 
                 @Override
@@ -67,8 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        utils = new Utils();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Profile");
+        setTitle("Update Profile");
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         myRef = database.getReference("Users");
@@ -167,8 +170,8 @@ public class ProfileActivity extends AppCompatActivity {
                 imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
                 // Set the Image in ImageView after decoding the String
-                viewImage.setImageBitmap(BitmapFactory
-                        .decodeFile(imgDecodableString));
+                viewImage.setImageBitmap(utils.getCircularImage(BitmapFactory.decodeFile(imgDecodableString)));
+
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
                 Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString, options);
@@ -188,6 +191,15 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            //overridePendingTransition(R.transition.stay, R.transition.slide_down);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

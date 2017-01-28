@@ -7,22 +7,23 @@
     <ImageView
         android:id="@+id/imageView1"
         android:layout_gravity="center_horizontal"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"
+        android:layout_margin="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="18sp"
         android:fontFamily="sans-serif"
         android:textStyle="normal|bold"
-        android:textColor="?android:attr/colorPressedHighlight"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp" />
+        android:textColor="@color/colorAccent"
+        android:padding="5dp"
+        android:layout_margin="15dp" />
 
 
 </LinearLayout>
