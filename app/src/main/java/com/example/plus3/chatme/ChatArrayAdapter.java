@@ -20,10 +20,14 @@ public class ChatArrayAdapter extends ArrayAdapter<UserChat.ChatMessage> {
     private Context context;
 
 
+
     public ChatArrayAdapter(Context context, int resource) {
         super(context, resource);
         this.context = context;
+
+
     }
+
 
     @Override
     public void add(UserChat.ChatMessage object) {
@@ -38,17 +42,30 @@ public class ChatArrayAdapter extends ArrayAdapter<UserChat.ChatMessage> {
         return this.chatMessageList.get(index);
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         UserChat.ChatMessage chatMessageObj = getItem(position);
         View row = convertView;
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (chatMessageObj.left) {
-            row = inflater.inflate(R.layout.right, parent, false);
-        }else{
-            row = inflater.inflate(R.layout.left, parent, false);
-        }
-        chatText = (TextView) row.findViewById(R.id.msgr);
-        chatText.setText(chatMessageObj.message);
+
+            if (chatMessageObj.left) {
+
+                row = inflater.inflate(R.layout.right, parent, false);
+
+
+            } else {
+
+                row = inflater.inflate(R.layout.left, parent, false);
+
+
+            }
+
+            chatText = (TextView) row.findViewById(R.id.msgr);
+            for (String item : chatMessageObj.message)
+            {
+                chatText.setText(item);
+            }
+
         return row;
     }
 }

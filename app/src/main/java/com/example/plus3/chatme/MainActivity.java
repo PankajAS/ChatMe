@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private  EditText email, password;
     private DatabaseReference myRef;
     private DatabaseReference myRef1;
-    String userId;
+    private String userId;
     private ProgressBar progressBar;
 
 

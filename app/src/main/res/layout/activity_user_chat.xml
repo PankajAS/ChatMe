@@ -20,6 +20,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/msgs"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:layout_above="@+id/textmsg" />
 
     <EditText
