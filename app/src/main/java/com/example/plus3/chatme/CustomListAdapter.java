@@ -15,6 +15,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private final  ArrayList<String> itemname;
     private final ArrayList<Bitmap> imgid;
+
     public CustomListAdapter(Activity context, ArrayList<String> itemname, ArrayList<Bitmap> imgid) {
         super(context, R.layout.userlist,itemname);
         this.context = context;
@@ -25,15 +26,14 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.userlist, null ,true);
+        View rowView = inflater.inflate(R.layout.userlist, null ,true);
 
-       TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
-       ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
 
         txtTitle.setText(itemname.get(position));
         imageView.setImageBitmap(imgid.get(position));
 
         return rowView;
-
     }
 }

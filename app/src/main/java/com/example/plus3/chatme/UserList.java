@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class UserList extends AppCompatActivity {
+
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase listData;
     private FirebaseUser user;
@@ -34,7 +35,6 @@ public class UserList extends AppCompatActivity {
     ArrayList<String> list= new ArrayList<String>();
     ArrayList<Bitmap> piclist = new ArrayList<>();
     ArrayList<String> userKeys;
-    ArrayAdapter<String> adapter;
     String CURRENT_USER;
     String USER_NAME;
 
@@ -58,56 +58,49 @@ public class UserList extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-        setTitle("User List");
+        setTitle(R.string.app_name);
+
         utils = new Utils();
         listView = (ListView)findViewById(R.id.userList);
         listData = listData.getInstance();
+
         databaseReference = listData.getReference("Users");
-        //adapter = new ArrayAdapter<String>(this,R.layout.userlist,R.id.textView1,list);
-        //listView.setAdapter(adapter);
+
         firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
         final Intent intent = getIntent();
         CURRENT_USER = intent.getStringExtra("UID");
         getCurrentUserName();
-        final CustomListAdapter adapterr = new CustomListAdapter(this,list,piclist);
-        listView.setAdapter(adapterr);
+        final CustomListAdapter adapter = new CustomListAdapter(this,list,piclist);
+        listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
 
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot data1:dataSnapshot.getChildren()){
 
                     userKeys.add(data1.getKey().toString());
-
-                  for(DataSnapshot dataSnapshot1:data1.getChildren()){
-
-                    for(DataSnapshot dataSnapshot2:dataSnapshot1.getChildren()) {
-
-                        if(dataSnapshot2.getKey().equals("Name") && !dataSnapshot2.getValue().equals(USER_NAME)){
-                            list.add(dataSnapshot2.getValue().toString());
+                    if(!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
+                        if (data1.child("Details").child("Name").getKey().equals("Name")) {
+                            list.add(data1.child("Details").child("Name").getValue().toString());
                         }
-
-                        if(dataSnapshot2.getKey().equals("pic") && !dataSnapshot2.getValue().equals(USER_NAME)){
-                            String base64Image = (String) dataSnapshot2.getValue();
+                        if (data1.child("Details").child("pic").getKey().equals("pic")) {
+                            String base64Image = (String) data1.child("Details").child("pic").getValue();
                             byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
                             Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
                             piclist.add(utils.getCircularImage(image));
-                            adapterr.notifyDataSetChanged();
-                       }
-                   }
-                 }
+                        }
+                    }
                }
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -115,11 +108,9 @@ public class UserList extends AppCompatActivity {
             }
         });
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-
                 Intent intent = new Intent(getApplicationContext(),UserChat.class);
                 intent.putExtra("ChatUser", userKeys.get(i));
                 intent.putExtra("UserName", list.get(i));
