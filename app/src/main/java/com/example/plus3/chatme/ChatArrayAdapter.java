@@ -57,14 +57,12 @@ public class ChatArrayAdapter extends ArrayAdapter<UserChat.ChatMessage> {
 
                 row = inflater.inflate(R.layout.left, parent, false);
 
-
             }
 
             chatText = (TextView) row.findViewById(R.id.msgr);
-            for (String item : chatMessageObj.message)
-            {
-                chatText.setText(item);
-            }
+
+                chatText.setText(chatMessageObj.message);
+
 
         return row;
     }

@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/msgr"
         android:layout_gravity="left"
-        android:background="@drawable/box"
+
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
