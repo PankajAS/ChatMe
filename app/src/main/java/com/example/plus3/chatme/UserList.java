@@ -81,7 +81,7 @@ public class UserList extends AppCompatActivity {
         userKeys  = new ArrayList<>();
 
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
