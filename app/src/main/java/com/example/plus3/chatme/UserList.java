@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,7 +86,10 @@ public class UserList extends AppCompatActivity {
 
                 for(DataSnapshot data1:dataSnapshot.getChildren()){
 
+                    if(!data1.getKey().equals(CURRENT_USER)){
                     userKeys.add(data1.getKey().toString());
+
+                    }
                     if(!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
                         if (data1.child("Details").child("Name").getKey().equals("Name")) {
                             list.add(data1.child("Details").child("Name").getValue().toString());

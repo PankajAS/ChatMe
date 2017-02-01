@@ -35,17 +35,18 @@ public class UserChat extends AppCompatActivity {
     private ArrayList<String> arrayList = new ArrayList<String>();
     private ListView listView;
     private ArrayAdapter<String> adapter;
-    ChatArrayAdapter chatArrayAdapter;
+    private ChatArrayAdapter chatArrayAdapter;
     private boolean side = false;
-    Button button;
-    String Chatid;
-    String UserId;
+    private Button button;
+    private String Chatid;
+    private String UserId;
     JSONArray jsonArray;
 
 
 
 
     public void sendMsg(View v) {
+
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(new Date());
         int hours = c.get(Calendar.HOUR_OF_DAY);
@@ -60,7 +61,14 @@ public class UserChat extends AppCompatActivity {
         String keySend = databaseReference.child("Sends").push().getKey();
         String keyReceive = databaseReference2.child("Receive").push().getKey();
         String mainKey = databaseReference2.child("Inbox").push().getKey();
+        String mainKeyy = databaseReference.child("Inbox").push().getKey();
         Intent inte = getIntent();
+        System.out.println(keySend);
+        System.out.println(keyReceive);
+        System.out.println(mainKey);
+        System.out.println(mainKeyy);
+        System.out.println(inte.getStringExtra("CurrentUser"));
+        System.out.println(inte.getStringExtra("ChatUser"));
 
         databaseReference.child("Inbox").child(mainKey).child("body").setValue(editText.getText().toString());
         databaseReference.child("Inbox").child(mainKey).child("time").setValue(time);
@@ -68,12 +76,12 @@ public class UserChat extends AppCompatActivity {
 
         databaseReference2.child("Inbox").child(mainKey).child("body").setValue(editText.getText().toString());
         databaseReference2.child("Inbox").child(mainKey).child("time").setValue(time);
-        databaseReference2.child("Inbox").child(mainKey).child("MessageBy").setValue(inte.getStringExtra("ChatUser"));
+        databaseReference2.child("Inbox").child(mainKey).child("MessageBy").setValue(inte.getStringExtra("CurrentUser"));
 
         databaseReference.child("Sends").child(keySend).child("body").setValue(editText.getText().toString());
         databaseReference.child("Sends").child(keySend).child("time").setValue(time);
-        databaseReference2.child("Receive").child(keySend).child("body").setValue(editText.getText().toString());
-        databaseReference2.child("Receive").child(keySend).child("time").setValue(time);
+        databaseReference2.child("Receive").child(keyReceive).child("body").setValue(editText.getText().toString());
+        databaseReference2.child("Receive").child(keyReceive).child("time").setValue(time);
         editText.setText("");
     }
     public class ChatMessage {
@@ -103,12 +111,12 @@ public class UserChat extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText = (EditText) findViewById(R.id.textmsg);
         listView = (ListView) findViewById(R.id.msgs);
-        button = (Button)findViewById(R.id.send);
+        button = (Button) findViewById(R.id.send);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         database = database.getInstance();
-        UserId  =user.getUid().toString();
+        UserId = user.getUid().toString();
         final Intent intent = getIntent();
         Intent intent2 = getIntent();
         setTitle(intent2.getStringExtra("UserName"));
@@ -128,34 +136,30 @@ public class UserChat extends AppCompatActivity {
         });
 
         //Chat Messages
-        databaseReference.child("Inbox").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Inbox").addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String msg = null;
-
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //System.out.println(data.getKey());
-                    //jsonArray.put(data.getValue());
-                    String name = null;
-                    String id = null;
-                    String time = null;
-
-                    for (DataSnapshot dataChild : data.getChildren()) {
+                System.out.println(dataSnapshot.getChildrenCount());
 
 
-                        if (dataChild.getKey().equals("body")) {
-                            msg = dataChild.getValue().toString();
-                            //System.out.println("Hello  "+msg);
-                            name = dataChild.getValue().toString();
-                        }
-                        if (dataChild.getKey().equals("MessageBy")) {
-                            Chatid = dataChild.getValue().toString();
-                            id = dataChild.getValue().toString();
-                        }
-                        if (dataChild.getKey().equals("time")) {
-
-                            time = dataChild.getValue().toString();
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        String name = null;
+                        String id = null;
+                        String time = null;
+                        for (DataSnapshot dataChild : data.getChildren()) {
+                            if (dataChild.getKey().equals("body")) {
+                                msg = dataChild.getValue().toString();
+                                name = dataChild.getValue().toString();
+                            }
+                            if (dataChild.getKey().equals("MessageBy")) {
+                                Chatid = dataChild.getValue().toString();
+                                id = dataChild.getValue().toString();
+                            }
+                            if (dataChild.getKey().equals("time")) {
+                                time = dataChild.getValue().toString();
+                            }
                         }
 
 
@@ -163,20 +167,55 @@ public class UserChat extends AppCompatActivity {
                             arrayList.add(msg);
                         }
 
-                    }
-                    String uId = UserId;
-                    if (uId != null) {
-                        if (id != null && name != null && time != null && uId != null) {
-                            if (id.equals(uId)) {
-                                sendChatMessage(name, true);
-                            } else if(!id.equals(uId)) {
-                                sendChatMessage(name, false);
+                        String uId = UserId;
+                        if (uId != null) {
+                            if (id != null && name != null && time != null && uId != null) {
+                                if (id.equals(uId)) {
+                                    sendChatMessage(name, true);
+                                } else if (!id.equals(uId)) {
+                                    sendChatMessage(name, false);
+                                }
                             }
+                        }
+
+                        chatArrayAdapter.notifyDataSetChanged();
+                    }
+                }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+
+            }
+        });
+
+
+        databaseReference.child("Inbox").addValueEventListener(new ValueEventListener(){
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String lastMessage = null;
+                String messageBy = null;
+                for(DataSnapshot data:dataSnapshot.getChildren()){
+
+                    for(DataSnapshot data1:data.getChildren()){
+                        if(data1.getKey().equals("body")){
+                            lastMessage = data1.getValue().toString();
+                        }
+                        if(data1.getKey().equals("MessageBy")){
+                            messageBy = data1.getValue().toString();
                         }
                     }
                 }
-                chatArrayAdapter.notifyDataSetChanged();
 
+                if(UserId!=null && messageBy !=null) {
+                    if (messageBy.equals(UserId)) {
+                       sendChatMessage(lastMessage, true);
+                    } else {
+                        sendChatMessage(lastMessage, false);
+                    }
+                }
             }
 
             @Override
@@ -187,6 +226,9 @@ public class UserChat extends AppCompatActivity {
 
 
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
