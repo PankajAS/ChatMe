@@ -24,16 +24,34 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater=context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.userlist, null ,true);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        System.gc();
+        CustomListAdapter.ViewHolder holder = null;
+        if(convertView == null) {
+            holder = new CustomListAdapter.ViewHolder();
+            LayoutInflater inflater=context.getLayoutInflater();
+            convertView = inflater.inflate(R.layout.userlist, null ,true);
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
+            holder.txtTitle = (TextView) convertView.findViewById(R.id.textView1);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView1);
 
-        txtTitle.setText(itemname.get(position));
-        imageView.setImageBitmap(imgid.get(position));
+            try {
+                holder.txtTitle.setText(itemname.get(position));
+                holder.imageView.setImageBitmap(imgid.get(position));
 
-        return rowView;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            convertView.setTag(holder);
+        } else {
+            holder = (CustomListAdapter.ViewHolder) convertView.getTag();
+        }
+        return convertView;
+    }
+
+    private class ViewHolder {
+        TextView txtTitle;
+        ImageView imageView;
     }
 }
