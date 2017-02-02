@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -128,26 +129,21 @@ public class UserChat extends AppCompatActivity {
             public void onClick(View arg0) {
                 sendMsg();
 
-
-                databaseReference.child("Inbox").addListenerForSingleValueEvent(new ValueEventListener(){
-
+                databaseReference.child("Inbox").addChildEventListener(new ChildEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         String lastMessage = null;
                         String messageBy = null;
 
-                        //System.out.println(dataSnapshot.getKey());
                         for(DataSnapshot data:dataSnapshot.getChildren()){
-
-                            for(DataSnapshot data1:data.getChildren()){
-                                if(data1.getKey().equals("body")){
-                                    lastMessage = data1.getValue().toString();
-                                }
-                                if(data1.getKey().equals("MessageBy")){
-                                    messageBy = data1.getValue().toString();
-                                }
+                            if(data.getKey().equals("body")){
+                                lastMessage = data.getValue().toString();
+                            }
+                            if(data.getKey().equals("MessageBy")){
+                                messageBy = data.getValue().toString();
                             }
                         }
+                        System.out.println(messageBy);
                         if(UserId!=null && messageBy !=null) {
                             if (messageBy.equals(UserId)) {
                                 sendChatMessage(lastMessage, true);
@@ -158,14 +154,30 @@ public class UserChat extends AppCompatActivity {
                     }
 
                     @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
 
-
             }
         });
+
+
 
 
         //Chat Messages
