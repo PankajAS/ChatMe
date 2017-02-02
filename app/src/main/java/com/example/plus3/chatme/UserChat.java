@@ -45,7 +45,7 @@ public class UserChat extends AppCompatActivity {
 
 
 
-    public void sendMsg(View v) {
+    public void sendMsg() {
 
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(new Date());
@@ -63,12 +63,6 @@ public class UserChat extends AppCompatActivity {
         String mainKey = databaseReference2.child("Inbox").push().getKey();
         String mainKeyy = databaseReference.child("Inbox").push().getKey();
         Intent inte = getIntent();
-        System.out.println(keySend);
-        System.out.println(keyReceive);
-        System.out.println(mainKey);
-        System.out.println(mainKeyy);
-        System.out.println(inte.getStringExtra("CurrentUser"));
-        System.out.println(inte.getStringExtra("ChatUser"));
 
         databaseReference.child("Inbox").child(mainKey).child("body").setValue(editText.getText().toString());
         databaseReference.child("Inbox").child(mainKey).child("time").setValue(time);
@@ -128,12 +122,51 @@ public class UserChat extends AppCompatActivity {
         listView.setAdapter(chatArrayAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                sendMsg(button);
+                sendMsg();
+
+
+                databaseReference.child("Inbox").addListenerForSingleValueEvent(new ValueEventListener(){
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String lastMessage = null;
+                        String messageBy = null;
+
+                        //System.out.println(dataSnapshot.getKey());
+                        for(DataSnapshot data:dataSnapshot.getChildren()){
+
+                            for(DataSnapshot data1:data.getChildren()){
+                                if(data1.getKey().equals("body")){
+                                    lastMessage = data1.getValue().toString();
+                                }
+                                if(data1.getKey().equals("MessageBy")){
+                                    messageBy = data1.getValue().toString();
+                                }
+                            }
+                        }
+                        if(UserId!=null && messageBy !=null) {
+                            if (messageBy.equals(UserId)) {
+                                sendChatMessage(lastMessage, true);
+                            } else {
+                                sendChatMessage(lastMessage, false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
         });
+
 
         //Chat Messages
         databaseReference.child("Inbox").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,8 +174,6 @@ public class UserChat extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String msg = null;
-                System.out.println(dataSnapshot.getChildrenCount());
-
 
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
                         String name = null;
@@ -189,41 +220,6 @@ public class UserChat extends AppCompatActivity {
 
             }
         });
-
-
-        databaseReference.child("Inbox").addValueEventListener(new ValueEventListener(){
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String lastMessage = null;
-                String messageBy = null;
-                for(DataSnapshot data:dataSnapshot.getChildren()){
-
-                    for(DataSnapshot data1:data.getChildren()){
-                        if(data1.getKey().equals("body")){
-                            lastMessage = data1.getValue().toString();
-                        }
-                        if(data1.getKey().equals("MessageBy")){
-                            messageBy = data1.getValue().toString();
-                        }
-                    }
-                }
-
-                if(UserId!=null && messageBy !=null) {
-                    if (messageBy.equals(UserId)) {
-                       sendChatMessage(lastMessage, true);
-                    } else {
-                        sendChatMessage(lastMessage, false);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
 
     }
 
