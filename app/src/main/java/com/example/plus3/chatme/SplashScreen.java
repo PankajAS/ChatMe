@@ -16,18 +16,7 @@ public class SplashScreen extends Activity {
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);//Enable offline storage for application
 
-        Thread timerThread = new Thread() {
-            public void run() {
-                try {
-                    sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-        };
-        timerThread.start();
+        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+        startActivity(intent);
     }
 }
