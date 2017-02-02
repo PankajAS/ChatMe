@@ -19,8 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +39,7 @@ public class UserChat extends AppCompatActivity {
     private Button button;
     private String Chatid;
     private String UserId;
-    JSONArray jsonArray;
+    String lastmegs;
 
 
 
@@ -98,6 +96,11 @@ public class UserChat extends AppCompatActivity {
 
     }
 
+    public void LastMessage(String child){
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,12 +121,12 @@ public class UserChat extends AppCompatActivity {
         databaseReference = database.getReference("Users").child(intent.getStringExtra("CurrentUser")).child("Messages").child(intent.getStringExtra("ChatUser"));
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
 
-        jsonArray = new JSONArray();
+
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.left);
         listView.setAdapter(chatArrayAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-
+       String name;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -141,8 +144,10 @@ public class UserChat extends AppCompatActivity {
                             }
                             if(data.getKey().equals("MessageBy")){
                                 messageBy = data.getValue().toString();
+
                             }
                         }
+
                         System.out.println(messageBy);
                         if(UserId!=null && messageBy !=null) {
                             if (messageBy.equals(UserId)) {
@@ -153,8 +158,10 @@ public class UserChat extends AppCompatActivity {
                         }
                     }
 
+
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        System.out.println(s);
 
                     }
 
