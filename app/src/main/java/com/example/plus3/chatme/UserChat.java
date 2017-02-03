@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserChat extends AppCompatActivity {
     private EditText editText;
@@ -39,13 +41,13 @@ public class UserChat extends AppCompatActivity {
     private Button button;
     private String Chatid;
     private String UserId;
+    Map<String,String> map;
     String lastmegs;
 
 
 
 
     public void sendMsg() {
-
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(new Date());
         int hours = c.get(Calendar.HOUR_OF_DAY);
@@ -77,6 +79,7 @@ public class UserChat extends AppCompatActivity {
         databaseReference2.child("Receive").child(keyReceive).child("time").setValue(time);
         editText.setText("");
     }
+
     public class ChatMessage {
         public boolean left;
         public String message;
@@ -93,11 +96,6 @@ public class UserChat extends AppCompatActivity {
         chatArrayAdapter.add(new ChatMessage(side, name));
         editText.setText("");
          return true;
-
-    }
-
-    public void LastMessage(String child){
-
 
     }
 
@@ -120,38 +118,44 @@ public class UserChat extends AppCompatActivity {
         setTitle(intent2.getStringExtra("UserName"));
         databaseReference = database.getReference("Users").child(intent.getStringExtra("CurrentUser")).child("Messages").child(intent.getStringExtra("ChatUser"));
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
-
+        map = new HashMap<String, String>();
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.left);
         listView.setAdapter(chatArrayAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-       String name;
+
+
+
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View arg0) {
-                sendMsg();
 
+                sendMsg();
                 databaseReference.child("Inbox").addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         String lastMessage = null;
                         String messageBy = null;
 
-                        for(DataSnapshot data:dataSnapshot.getChildren()){
-                            if(data.getKey().equals("body")){
+
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            if (data.getKey().equals("body")) {
                                 lastMessage = data.getValue().toString();
                             }
-                            if(data.getKey().equals("MessageBy")){
+                            if (data.getKey().equals("MessageBy")) {
                                 messageBy = data.getValue().toString();
-
                             }
                         }
 
-                        System.out.println(messageBy);
-                        if(UserId!=null && messageBy !=null) {
+                        //System.out.println(messageBy);
+                        //System.out.println(map);
+
+                        if (UserId != null && messageBy != null) {
                             if (messageBy.equals(UserId)) {
                                 sendChatMessage(lastMessage, true);
+
                             } else {
                                 sendChatMessage(lastMessage, false);
                             }
@@ -161,7 +165,6 @@ public class UserChat extends AppCompatActivity {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        System.out.println(s);
 
                     }
 
@@ -181,8 +184,47 @@ public class UserChat extends AppCompatActivity {
                     }
                 });
 
+
             }
         });
+
+        databaseReference.child("Inbox").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+
+                    try{
+                   Chat model = dataSnapshot.getValue(Chat.class);
+
+                    System.out.println(model.getId());}
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 
@@ -212,9 +254,8 @@ public class UserChat extends AppCompatActivity {
                             }
                         }
 
-
                         if (msg != null) {
-                            arrayList.add(msg);
+                            //arrayList.add(msg);
                         }
 
                         String uId = UserId;
@@ -227,7 +268,6 @@ public class UserChat extends AppCompatActivity {
                                 }
                             }
                         }
-
                         chatArrayAdapter.notifyDataSetChanged();
                     }
                 }
