@@ -5,31 +5,27 @@ package com.example.plus3.chatme;
  */
 
 public class Chat {
-    private String message;
-    private String id;
+    private String body;
+    private String MessageBy;
     private String time;
 
-    public Chat(String time, String message, String id) {
-        this.message = message;
-        this.id = id;
+    public Chat(){
+
+    }
+
+    public Chat(String time, String body, String MessageBy) {
+        this.body = body;
+        this.MessageBy = MessageBy;
         this.time = time;
     }
 
-    public String getMessage() {
-        return message;
-    }
+    public  String getBody(){return body;}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public  void setBody(String body){this.body = body;}
 
-    public String getId() {
-        return id;
-    }
+    public  String getMessageBy(){return MessageBy;}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public  void setMessageBy(String MessageBy){ this.MessageBy = MessageBy;}
 
     public  String getTime(){ return  time;}
 

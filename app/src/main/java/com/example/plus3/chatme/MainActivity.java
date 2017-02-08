@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void login(View view){
+
         String email = this.email.getText().toString();
         String passwords = password.getText().toString();
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             auth.signInWithEmailAndPassword(email, passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -83,13 +85,15 @@ public class MainActivity extends AppCompatActivity {
         myRef = database.getReference("Users");
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
+        Intent intentt = new Intent(this, ChatInbox.class);
 
-
-        if(user!=null) {
+        if(user!=null){
             if(user.getUid()!=null){
                 Intent intent = new Intent(getApplicationContext(),UserList.class);
                 userId=user.getUid().toString();
                 intent.putExtra("UID",userId);
+                intentt.putExtra("UID",userId);
+                //startActivity(intentt);
                 startActivity(intent);
             System.out.println(user.getUid());
             }

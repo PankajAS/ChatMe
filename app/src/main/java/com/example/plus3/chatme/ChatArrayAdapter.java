@@ -52,7 +52,6 @@ public class ChatArrayAdapter extends ArrayAdapter<UserChat.ChatMessage> {
 
                 row = inflater.inflate(R.layout.right, parent, false);
 
-
             } else {
 
                 row = inflater.inflate(R.layout.left, parent, false);
@@ -60,8 +59,7 @@ public class ChatArrayAdapter extends ArrayAdapter<UserChat.ChatMessage> {
             }
 
             chatText = (TextView) row.findViewById(R.id.msgr);
-
-                chatText.setText(chatMessageObj.message);
+            chatText.setText(chatMessageObj.message);
 
 
         return row;
