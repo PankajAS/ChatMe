@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.plus3.chatme.UserList">
+    tools:context="com.example.plus3.chatme.UserList"
+    android:background="@color/colorGray">
 
     <ListView
         android:layout_width="match_parent"
