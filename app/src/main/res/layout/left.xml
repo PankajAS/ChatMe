@@ -27,7 +27,8 @@
             android:text=""
             android:id="@+id/msgr"
             android:padding="10dp"
-            />
+            android:textColor="@color/colorBlack"
+            android:background="@color/colorGray" />
 
     </android.support.v7.widget.CardView>
 </RelativeLayout>

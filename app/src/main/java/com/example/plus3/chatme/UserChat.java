@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import android.text.format.DateFormat;
 
 public class UserChat extends AppCompatActivity {
     private EditText editText;
@@ -79,7 +80,7 @@ public class UserChat extends AppCompatActivity {
                 String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
 
                 if(message !=null){
-                    databaseReference.child("Inbox").push().setValue(new Chat(time, message, UserId));
+                    databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
                     databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
                 }
                 editText.setText("");
@@ -128,8 +129,10 @@ public class UserChat extends AppCompatActivity {
 
     }
 
-
-
+    private String getCurrentTime() {
+        String delegate = "hh:mm aaa";
+        return (String) DateFormat.format(delegate,Calendar.getInstance().getTime());
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

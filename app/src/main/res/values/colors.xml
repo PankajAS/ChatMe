@@ -8,8 +8,9 @@
     <color name="colorAccent">#1a1a1a</color>
     <color name="colorText">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorButtonTextShadow">#ffffff</color>
-    <color name="colorGray">#eae6e6</color>
-    <color name="colorGreen">#389382</color>
+    <color name="colorGray">#e4dfdf</color>
+    <color name="colorGreen">#fb0bb608</color>
     <color name="colorRed">#FF0000</color>
 </resources>

@@ -28,7 +28,8 @@
             android:text=""
             android:id="@+id/msgr"
             android:padding="10dp"
-            android:background="#d5d1ac" />
+            android:textColor="@color/colorText"
+            android:background="@color/colorGreen" />
 
     </android.support.v7.widget.CardView>
 </RelativeLayout>
