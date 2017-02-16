@@ -40,6 +40,8 @@
             android:padding="5dp"
             android:layout_weight="0.75"
             android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:layout_marginTop="10dp"
             tools:ignore="HardcodedText,ObsoleteLayoutParam"
             android:layout_marginRight="10dp" />
@@ -52,6 +54,8 @@
             android:layout_alignStart="@+id/textView1"
             android:layout_marginLeft="15dp"
             android:layout_marginStart="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/lastmsg"
             tools:ignore="HardcodedText" />
         <View

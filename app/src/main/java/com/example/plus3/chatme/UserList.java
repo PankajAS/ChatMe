@@ -150,8 +150,6 @@ public class UserList extends AppCompatActivity {
             }
         });
 
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
@@ -187,9 +185,14 @@ public class UserList extends AppCompatActivity {
             intent.putExtra("UID",CURRENT_USER);
             startActivity(intent);
 
-        } else  if (id == android.R.id.home) {
-            finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
