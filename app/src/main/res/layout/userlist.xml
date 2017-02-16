@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:weightSum="1">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView1"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/ic_launcher"
-        android:layout_margin="10dp"
         android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_width="2dp"
+        android:layout_margin="7dp"
+        app:civ_border_color="@color/colorGray"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp">
     <TextView
         android:id="@+id/textView1"
         android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="161dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="18sp"
@@ -23,7 +29,38 @@
         android:textStyle="normal|bold"
         android:textColor="@color/colorAccent"
         android:padding="5dp"
-        android:layout_margin="15dp" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        tools:ignore="HardcodedText,RtlHardcoded,UnusedAttribute" />
+        <TextView
+            android:text="10/02/2017"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/time"
+            android:padding="5dp"
+            android:layout_weight="0.75"
+            android:layout_marginStart="190dp"
+            android:layout_marginTop="10dp"
+            tools:ignore="HardcodedText,ObsoleteLayoutParam" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_alignStart="@+id/textView1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/lastmsg"
+            tools:ignore="HardcodedText" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/lastmsg"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="12dp" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,71 +32,12 @@ public class UserChat extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference2;
     private ArrayList<String> arrayList = new ArrayList<String>();
-    private ListView listView;
-    private ChatArrayAdapter chatArrayAdapter;
-    private boolean side = false;
     private Button button;
-    private String Chatid;
     private String UserId;
-    String lastmegs;
     private RecyclerView mRecyclerView;
-    List<Chat> mChats;
-    ChatAdapter mAdapter;
+    private List<Chat> mChats;
+    private ChatAdapter mAdapter;
 
-
-
-
-    public void sendMsg() {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTime(new Date());
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-        int sec = c.get(Calendar.SECOND);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
-
-
-        String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
-        String keySend = databaseReference.child("Sends").push().getKey();
-        String keyReceive = databaseReference2.child("Receive").push().getKey();
-        String mainKey = databaseReference2.child("Inbox").push().getKey();
-        String mainKeyy = databaseReference.child("Inbox").push().getKey();
-        Intent inte = getIntent();
-
-        databaseReference.child("Inbox").child(mainKey).child("body").setValue(editText.getText().toString());
-        databaseReference.child("Inbox").child(mainKey).child("time").setValue(time);
-        databaseReference.child("Inbox").child(mainKey).child("MessageBy").setValue(inte.getStringExtra("CurrentUser"));
-
-        databaseReference2.child("Inbox").child(mainKey).child("body").setValue(editText.getText().toString());
-        databaseReference2.child("Inbox").child(mainKey).child("time").setValue(time);
-        databaseReference2.child("Inbox").child(mainKey).child("MessageBy").setValue(inte.getStringExtra("CurrentUser"));
-
-        databaseReference.child("Sends").child(keySend).child("body").setValue(editText.getText().toString());
-        databaseReference.child("Sends").child(keySend).child("time").setValue(time);
-        databaseReference2.child("Receive").child(keyReceive).child("body").setValue(editText.getText().toString());
-        databaseReference2.child("Receive").child(keyReceive).child("time").setValue(time);
-        editText.setText("");
-    }
-
-    public class ChatMessage {
-        public boolean left;
-        public String message;
-
-        public ChatMessage(boolean left, String message) {
-            super();
-            this.left = left;
-            this.message = message;
-        }
-    }
-
-    private boolean sendChatMessage(String name, Boolean right){
-        side = right;
-        chatArrayAdapter.add(new ChatMessage(side, name));
-        editText.setText("");
-         return true;
-
-    }
 
 
     @Override
@@ -106,7 +46,6 @@ public class UserChat extends AppCompatActivity {
         setContentView(R.layout.chatinbox);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText = (EditText) findViewById(R.id.etText);
-        listView = (ListView) findViewById(R.id.msgs);
         button = (Button) findViewById(R.id.btSent);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -123,10 +62,6 @@ public class UserChat extends AppCompatActivity {
 
         mAdapter = new ChatAdapter(mChats,UserId);
         mRecyclerView.setAdapter(mAdapter);
-        //chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.left);
-        //listView.setAdapter(chatArrayAdapter);
-        //listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
 
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -141,19 +76,13 @@ public class UserChat extends AppCompatActivity {
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 int month = c.get(Calendar.MONTH);
                 int year = c.get(Calendar.YEAR);
-
-
                 String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
-                //sendMsg();
-                if(message !=null){
 
+                if(message !=null){
                     databaseReference.child("Inbox").push().setValue(new Chat(time, message, UserId));
                     databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
-
                 }
                 editText.setText("");
-
-
             }
         });
 
@@ -168,7 +97,6 @@ public class UserChat extends AppCompatActivity {
                         mChats.add(model);
                         mRecyclerView.scrollToPosition(mChats.size() -1);
                         mAdapter.notifyItemInserted(mChats.size() -1);
-
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -196,6 +124,7 @@ public class UserChat extends AppCompatActivity {
 
             }
         });
+
 
     }
 

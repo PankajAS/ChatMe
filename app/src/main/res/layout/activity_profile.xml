@@ -11,14 +11,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.plus3.chatme.ProfileActivity">
 
-    <ImageView
-        app:srcCompat="@mipmap/ic_launcher"
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_height="100dp" />
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_width="2dp"
+        android:layout_margin="7dp"
+        app:civ_border_color="@color/colorGray"/>
 
     <TextView
         android:layout_width="match_parent"

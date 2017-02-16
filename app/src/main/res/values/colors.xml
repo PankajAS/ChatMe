@@ -9,7 +9,7 @@
     <color name="colorText">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorButtonTextShadow">#ffffff</color>
-    <color name="colorGray">#d3d3d3</color>
+    <color name="colorGray">#eae6e6</color>
     <color name="colorGreen">#389382</color>
     <color name="colorRed">#FF0000</color>
 </resources>

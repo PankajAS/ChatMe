@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,8 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.io.ByteArrayOutputStream;
-import android.graphics.drawable.BitmapDrawable;
 
 //imports to open media
 
@@ -183,7 +184,7 @@ public class ProfileActivity extends AppCompatActivity {
                 imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
                 // Set the Image in ImageView after decoding the String
-                viewImage.setImageBitmap(utils.getCircularImage(BitmapFactory.decodeFile(imgDecodableString)));
+                viewImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
 
             } else {
                 Toast.makeText(this, "You haven't picked Image",

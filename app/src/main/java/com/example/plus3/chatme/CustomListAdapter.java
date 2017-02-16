@@ -10,48 +10,64 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
     private final Activity context;
-    private final  ArrayList<String> itemname;
+    private Map<String, String> itemname;
+    private Map<String, String> lastmsg;
+    private Map<String, Bitmap> pics;
     private final ArrayList<Bitmap> imgid;
+    private ArrayList<String> names;
+    private String CurrentUser;
 
-    public CustomListAdapter(Activity context, ArrayList<String> itemname, ArrayList<Bitmap> imgid) {
-        super(context, R.layout.userlist,itemname);
+    public CustomListAdapter(Activity context, String CurrentUser, Map<String,String> lastmsg, Map<String,String> map,Map<String,Bitmap> pics, ArrayList<Bitmap> imgid, ArrayList<String> list) {
+        super(context, R.layout.userlist, list);
         this.context = context;
-        this.itemname = itemname;
+        this.itemname = map;
         this.imgid = imgid;
+        this.names = list;
+        this.pics = pics;
+        this.lastmsg = lastmsg;
+        this.CurrentUser = CurrentUser;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        System.gc();
-        CustomListAdapter.ViewHolder holder = null;
-        if(convertView == null) {
-            holder = new CustomListAdapter.ViewHolder();
-            LayoutInflater inflater=context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.userlist, null ,true);
+    public View getView(int position, View view, ViewGroup parent) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View rowView= inflater.inflate(R.layout.userlist, null, true);
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
+        TextView lastmsgg = (TextView) rowView.findViewById(R.id.lastmsg);
+        TextView time = (TextView) rowView.findViewById(R.id.time);
 
-            holder.txtTitle = (TextView) convertView.findViewById(R.id.textView1);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView1);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
+        txtTitle.setText(new ArrayList<String>(itemname.values()).get(position));
+        lastmsgg.setText(new ArrayList<String>(itemname.values()).get(position));
+        time.setText(new ArrayList<String>(itemname.values()).get(position));
+        imageView.setImageBitmap(new ArrayList<Bitmap>(pics.values()).get(position));
 
-            try {
-                holder.txtTitle.setText(itemname.get(position));
-                holder.imageView.setImageBitmap(imgid.get(position));
+        try {
+            String ks = new ArrayList<String>(itemname.keySet()).get(position);
+            txtTitle.setText(new ArrayList<String>(itemname.values()).get(position));
+            imageView.setImageBitmap(new ArrayList<Bitmap>(pics.values()).get(position));
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            for(String msgkey:lastmsg.keySet()){
+                if(msgkey.equals(ks)){
+                        lastmsgg.setText(new ArrayList<String>(lastmsg.values()).get(position));
+                }
             }
+            //for(String timeKey:)
+            time.setText("15/02/2017");
 
-            convertView.setTag(holder);
-        } else {
-            holder = (CustomListAdapter.ViewHolder) convertView.getTag();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return convertView;
+        return rowView;
     }
 
+
     private class ViewHolder {
-        TextView txtTitle;
+        TextView txtTitle, lastmsg, time;
         ImageView imageView;
     }
 }
