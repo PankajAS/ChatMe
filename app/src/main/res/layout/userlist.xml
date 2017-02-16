@@ -39,9 +39,10 @@
             android:id="@+id/time"
             android:padding="5dp"
             android:layout_weight="0.75"
-            android:layout_marginStart="190dp"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
-            tools:ignore="HardcodedText,ObsoleteLayoutParam" />
+            tools:ignore="HardcodedText,ObsoleteLayoutParam"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/lastmsg"
-            android:background="@android:color/darker_gray"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
             android:layout_marginTop="12dp" />
 
     </RelativeLayout>

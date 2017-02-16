@@ -176,16 +176,19 @@ public class UserList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.signout){
+        int id = item.getItemId();
+        if(id == R.id.signout){
             FirebaseAuth.getInstance().signOut();
             finish();
             startActivity(new Intent(this,MainActivity.class));
-        }else if(item.getItemId()==R.id.settings){
+        }else if(id==R.id.settings){
 
             Intent intent = new Intent(this,ProfileActivity.class);
             intent.putExtra("UID",CURRENT_USER);
             startActivity(intent);
 
+        } else  if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
