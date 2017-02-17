@@ -43,13 +43,11 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             auth.signInWithEmailAndPassword(email, passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-
                     if (task.isSuccessful()) {
                         String id = task.getResult().getUser().getUid().toString();
-                        Intent intent = new Intent(getApplicationContext(), UserList.class);
+                        Intent intent = new Intent(getApplicationContext(), UserChat.class);
                         if (id != null) {
                             userId = id;
                             intent.putExtra("UID", userId);
@@ -85,15 +83,12 @@ public class MainActivity extends AppCompatActivity {
         myRef = database.getReference("Users");
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        Intent intentt = new Intent(this, ChatInbox.class);
 
         if(user!=null){
             if(user.getUid()!=null){
-                Intent intent = new Intent(getApplicationContext(),UserList.class);
+                Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
                 userId=user.getUid().toString();
                 intent.putExtra("UID",userId);
-                intentt.putExtra("UID",userId);
-                //startActivity(intentt);
                 finish();
                 startActivity(intent);
             System.out.println(user.getUid());

@@ -1,6 +1,6 @@
 package com.example.plus3.chatme;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
-    private final Activity context;
+    private final Context context;
     private Map<String, String> itemname;
     private Map<String, String> lastmsg;
     private Map<String, Bitmap> pics;
@@ -21,7 +21,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     private ArrayList<String> names;
     private String CurrentUser;
 
-    public CustomListAdapter(Activity context, String CurrentUser, Map<String,String> lastmsg, Map<String,String> map,Map<String,Bitmap> pics, ArrayList<Bitmap> imgid, ArrayList<String> list) {
+    public CustomListAdapter(Context context, String CurrentUser, Map<String,String> lastmsg, Map<String,String> map, Map<String,Bitmap> pics, ArrayList<Bitmap> imgid, ArrayList<String> list) {
         super(context, R.layout.userlist, list);
         this.context = context;
         this.itemname = map;
@@ -34,7 +34,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View rowView= inflater.inflate(R.layout.userlist, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
         TextView lastmsgg = (TextView) rowView.findViewById(R.id.lastmsg);

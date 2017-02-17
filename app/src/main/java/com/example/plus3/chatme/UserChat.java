@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import android.text.format.DateFormat;
 
-public class UserChat extends AppCompatActivity {
+public class UserChat extends AppCompatActivity{
     private EditText editText;
     private FirebaseDatabase database;
     private FirebaseAuth auth;

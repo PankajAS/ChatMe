@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserList extends AppCompatActivity {
+public class UserList extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase listData;
@@ -64,22 +64,24 @@ public class UserList extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_list);
-        setTitle(R.string.app_name);
-        listView = (ListView)findViewById(R.id.userList);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_user_list);
+        //setTitle(R.string.app_name);
+        View v = inflater.inflate(R.layout.activity_user_list,container,false);
+        listView = (ListView) v.findViewById(R.id.userList);
         listData = listData.getInstance();
         databaseReference = listData.getReference("Users");
         firebaseAuth = FirebaseAuth.getInstance();
-        final Intent intent = getIntent();
-        CURRENT_USER = intent.getStringExtra("UID");
+        //final Intent intent = getIntent();
+        Bundle b= getActivity().getIntent().getExtras();
+        CURRENT_USER = b.getString("UID");
         getCurrentUserName();
         map = new HashMap<String,String>();
         pics = new HashMap<String,Bitmap>();
         final Map<String,String> lastmessages = new HashMap<>();
         final Map<String,String> time = new HashMap<>();
-        final CustomListAdapter adapter = new CustomListAdapter(this,CURRENT_USER, lastmessages,map,pics,piclist,list);
+        final CustomListAdapter adapter = new CustomListAdapter(getContext(),CURRENT_USER,lastmessages,map,pics,piclist,list);
         listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
 
@@ -150,10 +152,12 @@ public class UserList extends AppCompatActivity {
             }
         });
 
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                Intent intent = new Intent(getApplicationContext(),UserChat.class);
+                Intent intent = new Intent(getContext(),UserChat.class);
                 //intent.putExtra("ChatUser", userKeys.get(i));
                 intent.putExtra("ChatUser", new ArrayList<String>(map.keySet()).get(i));
                 intent.putExtra("UserName", new ArrayList<String>(map.values()).get(i));
@@ -162,37 +166,8 @@ public class UserList extends AppCompatActivity {
 
             }
         });
+        return v;
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.signout){
-            FirebaseAuth.getInstance().signOut();
-            finish();
-            startActivity(new Intent(this,MainActivity.class));
-        }else if(id==R.id.settings){
-
-            Intent intent = new Intent(this,ProfileActivity.class);
-            intent.putExtra("UID",CURRENT_USER);
-            startActivity(intent);
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
 }
