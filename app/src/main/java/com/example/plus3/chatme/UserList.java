@@ -95,11 +95,12 @@ public class UserList extends Fragment {
                 for(DataSnapshot data1:dataSnapshot.getChildren()){
 
                     if(!data1.getKey().equals(CURRENT_USER)){
-                    userKeys.add(data1.getKey().toString());
-                    key = data1.getKey().toString();
+                        userKeys.add(data1.getKey().toString());
+                        key = data1.getKey().toString();
                     }
 
                     if(!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
+
                         if (data1.child("Details").child("Name").getKey().equals("Name")) {
                             list.add(data1.child("Details").child("Name").getValue().toString());
                             val = data1.child("Details").child("Name").getValue().toString();
@@ -112,10 +113,11 @@ public class UserList extends Fragment {
                             piclist.add(image);
                             pic=image;
                         }
+
                     }
                     if(val!=null && pic !=null && key!=null){
-                    map.put(key,val);
-                    pics.put(key,pic);
+                        map.put(key,val);
+                        pics.put(key,pic);
                     }
                }
                 //String value = (new ArrayList<String>(map.values().hashCode()).get(1));

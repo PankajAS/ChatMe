@@ -2,9 +2,10 @@ package com.example.plus3.chatme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -19,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth auth;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference myRef,myRef1;
     private String userId;
     private ProgressBar progressBar;
+    private Button button;
 
 
 
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             auth.signInWithEmailAndPassword(email, passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete( Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String id = task.getResult().getUser().getUid().toString();
                             Intent intent = new Intent(getApplicationContext(), UserChat.class);
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        button = (Button)findViewById(R.id.login);
+
         setContentView(R.layout.activity_main);
         email = (EditText)findViewById(R.id.email);
         password = (EditText)findViewById(R.id.password);
@@ -82,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         myRef = database.getReference("Users");
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-
-
 
         if(user!=null){
             if(user.getUid()!=null){
@@ -95,5 +97,19 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(user.getUid());
             }
         }
+        password.setOnKeyListener(this);
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_ENTER){
+            login(button);
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
