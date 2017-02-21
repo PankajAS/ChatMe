@@ -11,7 +11,7 @@
     tools:context="com.example.plus3.chatme.fragmentTabs.Tab1">
 
     <TextView
-        android:text="Calls"
+        android:text="no data found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

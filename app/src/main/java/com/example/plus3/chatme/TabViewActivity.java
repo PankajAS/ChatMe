@@ -46,6 +46,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         viewPager = (ViewPager)findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);//selecting the selected tab as CHAT TAB
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setOnTabSelectedListener(this);
         Intent in = getIntent();
