@@ -84,9 +84,13 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
+        Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
+        intent.putExtra("UID","a7rsTgsHLGRvCJbEDXLPno7u8XJ3");
+        startActivity(intent);
+
         if(user!=null){
             if(user.getUid()!=null){
-                Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
+                //Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
                 userId=user.getUid().toString();
                 intent.putExtra("UID",userId);
                 finish();

@@ -85,6 +85,7 @@ public class UserList extends Fragment {
         listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
 
+
         databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

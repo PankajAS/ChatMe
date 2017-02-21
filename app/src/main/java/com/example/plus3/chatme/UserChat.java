@@ -52,6 +52,7 @@ public class UserChat extends AppCompatActivity{
         user = auth.getCurrentUser();
         database = database.getInstance();
         UserId = user.getUid().toString();
+        //UserId = "a7rsTgsHLGRvCJbEDXLPno7u8XJ3";
         final Intent intent = getIntent();
         Intent intent2 = getIntent();
         setTitle(intent2.getStringExtra("UserName"));
