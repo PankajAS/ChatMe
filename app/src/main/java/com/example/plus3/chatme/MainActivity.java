@@ -23,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser user;
     private FirebaseDatabase database;
     private  EditText email, password;
-    private DatabaseReference myRef;
-    private DatabaseReference myRef1;
+    private DatabaseReference myRef,myRef1;
     private String userId;
     private ProgressBar progressBar;
 
@@ -41,25 +41,24 @@ public class MainActivity extends AppCompatActivity {
         if(!email.isEmpty() && !passwords.isEmpty()) {
 
             progressBar.setVisibility(View.VISIBLE);
-
             auth.signInWithEmailAndPassword(email, passwords).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        String id = task.getResult().getUser().getUid().toString();
-                        Intent intent = new Intent(getApplicationContext(), UserChat.class);
-                        if (id != null) {
-                            userId = id;
-                            intent.putExtra("UID", userId);
-                            finish();
-                            startActivity(intent);
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String id = task.getResult().getUser().getUid().toString();
+                            Intent intent = new Intent(getApplicationContext(), UserChat.class);
+                            if (id != null) {
+                                userId = id;
+                                intent.putExtra("UID", userId);
+                                finish();
+                                startActivity(intent);
+                            }
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), task.getException().toString().substring(task.getException().toString().indexOf(" ")), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), task.getException().toString().substring(task.getException().toString().indexOf(" ")), Toast.LENGTH_SHORT).show();
                     }
-                }
-            });
+                });
         }
         else
         {
@@ -84,13 +83,11 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
-        Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
-        intent.putExtra("UID","a7rsTgsHLGRvCJbEDXLPno7u8XJ3");
-        startActivity(intent);
+
 
         if(user!=null){
             if(user.getUid()!=null){
-                //Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
+                Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
                 userId=user.getUid().toString();
                 intent.putExtra("UID",userId);
                 finish();

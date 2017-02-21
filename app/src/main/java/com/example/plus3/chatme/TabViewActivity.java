@@ -33,7 +33,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
+        //tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#ffffff"));
         viewPager = (ViewPager)findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
         viewPager.setAdapter(adapter);
@@ -41,7 +41,6 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         tabLayout.setOnTabSelectedListener(this);
         Intent in = getIntent();
         CURRENT_USER = in.getStringExtra("UID");
-
 
     }
 
