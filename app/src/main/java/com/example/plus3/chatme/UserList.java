@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,35 +92,41 @@ public class UserList extends Fragment {
                 String key = null;
                 String val = null;
                 Bitmap pic = null;
+                try {
+                    for (DataSnapshot data1 : dataSnapshot.getChildren()) {
 
-                for(DataSnapshot data1:dataSnapshot.getChildren()){
-
-                    if(!data1.getKey().equals(CURRENT_USER)){
-                        userKeys.add(data1.getKey().toString());
-                        key = data1.getKey().toString();
-                    }
-
-                    if(!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
-
-                        if (data1.child("Details").child("Name").getKey().equals("Name")) {
-                            list.add(data1.child("Details").child("Name").getValue().toString());
-                            val = data1.child("Details").child("Name").getValue().toString();
+                        if (!data1.getKey().equals(CURRENT_USER)) {
+                            userKeys.add(data1.getKey().toString());
+                            key = data1.getKey().toString();
                         }
 
-                        if (data1.child("Details").child("pic").getKey().equals("pic")) {
-                            String base64Image = (String) data1.child("Details").child("pic").getValue();
-                            byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
-                            Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-                            piclist.add(image);
-                            pic=image;
-                        }
+                        if (!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
 
+                            if (data1.child("Details").child("Name").getKey().equals("Name")) {
+                                list.add(data1.child("Details").child("Name").getValue().toString());
+                                val = data1.child("Details").child("Name").getValue().toString();
+                            }
+
+                            if (data1.child("Details").child("pic").getKey().equals("pic")) {
+                                String base64Image = (String) data1.child("Details").child("pic").getValue();
+                                byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                                Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                                piclist.add(image);
+                                pic = image;
+                            }
+
+                        }
+                        if (val != null && pic != null && key != null) {
+                            map.put(key, val);
+                            pics.put(key, pic);
+                        }
                     }
-                    if(val!=null && pic !=null && key!=null){
-                        map.put(key,val);
-                        pics.put(key,pic);
-                    }
-               }
+                }
+                catch(Exception ex)
+                {
+                    System.out.println(ex.getMessage());
+                    Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 //String value = (new ArrayList<String>(map.values().hashCode()).get(1));
                 adapter.notifyDataSetChanged();
             }

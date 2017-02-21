@@ -48,11 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete( Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String id = task.getResult().getUser().getUid().toString();
-                            Intent intent = new Intent(getApplicationContext(), UserChat.class);
+                            Intent intent = new Intent(getApplicationContext(), TabViewActivity.class);
                             if (id != null) {
                                 userId = id;
                                 intent.putExtra("UID", userId);
-                                finish();
                                 startActivity(intent);
                             }
                         } else {
@@ -87,16 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
-        if(user!=null){
-            if(user.getUid()!=null){
-                Intent intent = new Intent(getApplicationContext(),TabViewActivity.class);
-                userId=user.getUid().toString();
-                intent.putExtra("UID",userId);
-                finish();
-                startActivity(intent);
-            System.out.println(user.getUid());
-            }
-        }
         password.setOnKeyListener(this);
     }
 
