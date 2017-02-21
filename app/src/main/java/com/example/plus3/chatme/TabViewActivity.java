@@ -31,6 +31,11 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
 
+        requestContactReadPermission();
+
+    }
+
+    private void initializeTabView() {
         String[] tabBarTitles = new String[]{
                 getString(R.string.Calls),
                 getString(R.string.Chats),
@@ -51,9 +56,6 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         tabLayout.setOnTabSelectedListener(this);
         Intent in = getIntent();
         CURRENT_USER = in.getStringExtra("UID");
-
-        requestContactReadPermission();
-
     }
 
     private void requestContactReadPermission() {
@@ -63,6 +65,9 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
             ActivityCompat.requestPermissions(TabViewActivity.this,
                     new String[]{android.Manifest.permission.READ_CONTACTS},
                     REQUEST_WRITE_STORAGE);
+        }
+        else{
+            initializeTabView();
         }
     }
 
@@ -74,7 +79,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
             case REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    //selectImage();
+                    initializeTabView();
 
                 } else
                 {

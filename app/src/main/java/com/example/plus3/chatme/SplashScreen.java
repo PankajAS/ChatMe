@@ -28,7 +28,7 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);//Enable offline storage for application
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);//Enable offline storage for application
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
