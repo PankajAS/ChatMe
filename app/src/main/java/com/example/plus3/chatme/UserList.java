@@ -41,30 +41,8 @@ public class UserList extends Fragment {
     Map<String, String> map;
     Map<String, Bitmap> pics;
 
-
-    public  void getCurrentUserName(){
-        databaseReference.child(CURRENT_USER).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data:dataSnapshot.getChildren()){
-                    for (DataSnapshot data2:data.getChildren()){
-                        if(data2.getKey().equals("Name")){
-                            USER_NAME = data2.getValue().toString();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_user_list);
         //setTitle(R.string.app_name);
@@ -87,26 +65,25 @@ public class UserList extends Fragment {
 
 
         databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Chat chat = null;
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        for(DataSnapshot data2:data.getChildren()) {
-                            for(DataSnapshot data3:data2.getChildren()) {
-                                chat = data3.getValue(Chat.class);
-                            }
-                            lastmessages.put(data.getKey(), chat.getBody());
-                            time.put(data.getKey(), chat.getTime());
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Chat chat = null;
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    for(DataSnapshot data2:data.getChildren()) {
+                        for(DataSnapshot data3:data2.getChildren()) {
+                            chat = data3.getValue(Chat.class);
                         }
+                        lastmessages.put(data.getKey(), chat.getBody());
+                        time.put(data.getKey(), chat.getTime());
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-
+            }
+        });
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -140,20 +117,15 @@ public class UserList extends Fragment {
                     map.put(key,val);
                     pics.put(key,pic);
                     }
-
-
                }
                 //String value = (new ArrayList<String>(map.values().hashCode()).get(1));
                 adapter.notifyDataSetChanged();
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -168,7 +140,24 @@ public class UserList extends Fragment {
             }
         });
         return v;
-
     }
 
+    public  void getCurrentUserName(){
+        databaseReference.child(CURRENT_USER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren()){
+                    for (DataSnapshot data2:data.getChildren()){
+                        if(data2.getKey().equals("Name")){
+                            USER_NAME = data2.getValue().toString();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

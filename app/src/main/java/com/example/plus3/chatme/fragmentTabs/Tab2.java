@@ -1,6 +1,8 @@
 package com.example.plus3.chatme.fragmentTabs;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -46,7 +48,7 @@ public class Tab2 extends Fragment {
         listView = (ListView) v.findViewById(R.id.list);
         listView.setDivider(null);
         listArray = new ArrayList<>();
-        /*Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
+        Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
         while(cursor.moveToNext()){
             try {
                 String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
@@ -67,7 +69,7 @@ public class Tab2 extends Fragment {
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
-        }*/
+        }
 
         adapter = new ArrayAdapter(getContext(),R.layout.userlist, R.id.textView1,listArray);
         listView.setAdapter(adapter);

@@ -17,7 +17,10 @@ public class SplashScreen extends Activity {
 
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
         startActivity(intent);
-
     }
-
+    @Override
+    public void onBackPressed(){
+        System.gc();
+        System.exit(0);
+    }
 }

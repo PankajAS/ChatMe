@@ -80,7 +80,7 @@ public class UserChat extends AppCompatActivity{
                 int year = c.get(Calendar.YEAR);
                 String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
 
-                if(message !=null){
+                if(message !=null && message!=""){
                     databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
                     databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
                 }
@@ -140,9 +140,7 @@ public class UserChat extends AppCompatActivity{
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
-            //overridePendingTransition(R.transition.stay, R.transition.slide_down);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

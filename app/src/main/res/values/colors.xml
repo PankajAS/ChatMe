@@ -10,7 +10,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorButtonTextShadow">#ffffff</color>
-    <color name="colorGray">#e4dfdf</color>
+    <color name="colorGray">#D3D3D3</color>
     <color name="colorGreen">#fb0bb608</color>
     <color name="colorRed">#FF0000</color>
 </resources>
