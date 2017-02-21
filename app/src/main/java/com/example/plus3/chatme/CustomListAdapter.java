@@ -39,12 +39,8 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.textView1);
         TextView lastmsgg = (TextView) rowView.findViewById(R.id.lastmsg);
         TextView time = (TextView) rowView.findViewById(R.id.time);
-
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-        txtTitle.setText(new ArrayList<String>(itemname.values()).get(position));
-        lastmsgg.setText(new ArrayList<String>(itemname.values()).get(position));
-        time.setText(new ArrayList<String>(itemname.values()).get(position));
-        imageView.setImageBitmap(new ArrayList<Bitmap>(pics.values()).get(position));
+
 
         try {
             String ks = new ArrayList<String>(itemname.keySet()).get(position);

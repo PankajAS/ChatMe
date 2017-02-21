@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.plus3.chatme.R;
@@ -32,9 +31,10 @@ public class Tab2 extends Fragment {
     private ListView listView;
     private List<String> list;
     ArrayList<HashMap<String,String>> contactData=new ArrayList<HashMap<String,String>>();
-    ArrayAdapter adapter;
+    //ArrayAdapter adapter;
     HashMap<String,String> map;
-    List<String> listArray;
+    List<String> listArray, listNumber;
+    ContactsListAdapter adapter;
 
 
 
@@ -51,6 +51,7 @@ public class Tab2 extends Fragment {
         listView = (ListView) v.findViewById(R.id.list);
         listView.setDivider(null);
         listArray = new ArrayList<>();
+        listNumber = new ArrayList<>();
         Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
         while(cursor.moveToNext()){
             try {
@@ -66,6 +67,8 @@ public class Tab2 extends Fragment {
 //                      map.put("number", phoneNumber);
                       contactData.add(map);
                       listArray.add(name);
+                      listNumber.add(phoneNumber);
+
                   }
                   phones.close();
               }
@@ -74,7 +77,8 @@ public class Tab2 extends Fragment {
             }
         }
 
-        adapter = new ArrayAdapter(getContext(),R.layout.userlist, R.id.textView1,listArray);
+
+        adapter = new ContactsListAdapter(getContext(),R.layout.userlist,listArray,listNumber);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
