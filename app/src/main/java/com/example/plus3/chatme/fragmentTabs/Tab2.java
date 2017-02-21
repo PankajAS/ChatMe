@@ -1,5 +1,6 @@
 package com.example.plus3.chatme.fragmentTabs;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -8,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.plus3.chatme.R;
+import com.example.plus3.chatme.UserChat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -58,9 +61,9 @@ public class Tab2 extends Fragment {
                   Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
                   while (phones.moveToNext()) {
                       String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                      map = new HashMap<String, String>();
-                      map.put("name", name);
-                      map.put("number", phoneNumber);
+//                      map = new HashMap<String, String>();
+//                      map.put("name", name);
+//                      map.put("number", phoneNumber);
                       contactData.add(map);
                       listArray.add(name);
                   }
@@ -74,7 +77,17 @@ public class Tab2 extends Fragment {
         adapter = new ArrayAdapter(getContext(),R.layout.userlist, R.id.textView1,listArray);
         listView.setAdapter(adapter);
 
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                Intent intent = new Intent(getContext(),UserChat.class);
+                //intent.putExtra("ChatUser", userKeys.get(i));
+                intent.putExtra("ChatUser", "");
+                intent.putExtra("UserName", listArray.get(i));
+                intent.putExtra("CurrentUser", listArray.get(i));
+                startActivity(intent);
+            }
+        });
         return v;
     }
 

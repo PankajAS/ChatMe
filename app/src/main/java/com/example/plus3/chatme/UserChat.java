@@ -80,7 +80,7 @@ public class UserChat extends AppCompatActivity{
                 int year = c.get(Calendar.YEAR);
                 String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
 
-                if(message !=null && message!=""){
+                if(message !=null && !message.isEmpty()){
                     databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
                     databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
                 }
