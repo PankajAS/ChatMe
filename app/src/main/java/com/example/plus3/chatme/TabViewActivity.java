@@ -9,7 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +29,8 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         requestContactReadPermission();
 
@@ -132,16 +134,13 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        switch(keyCode)
-        {
-            case KeyEvent.KEYCODE_BACK:
-
-                moveTaskToBack(true);
-
-                return true;
-        }
-        return false;
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_FROM_BACKGROUND);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
+
 }
