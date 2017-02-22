@@ -11,22 +11,22 @@ import android.widget.TextView;
 
 import com.example.plus3.chatme.R;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Plus 3 on 21-02-2017.
  */
 
 public class ContactsListAdapter extends ArrayAdapter<String> {
-    List<String> name, number;
+    HashMap<String, String> map;
     private final Context context;
 
 
-    public ContactsListAdapter(Context context, int resource, List<String> name, List<String> number) {
-        super(context, R.layout.userlist, name);
+    public ContactsListAdapter(Context context, int resource, HashMap<String, String> map) {
+        super(context, R.layout.userlist, new ArrayList<String>(map.keySet()));
         this.context =  context;
-        this.name = name;
-        this.number = number;
+        this.map = map;
     }
 
     @NonNull
@@ -44,8 +44,8 @@ public class ContactsListAdapter extends ArrayAdapter<String> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageView1);
 
             try{
-                holder.txtTitle.setText(name.get(position));
-                holder.numbers.setText(number.get(position));
+                holder.txtTitle.setText(new ArrayList<String>(map.values()).get(position));
+                holder.numbers.setText(new ArrayList<String>(map.keySet()).get(position));
                 holder.from.setText("Mobile");
             }catch (Exception e){
                 e.printStackTrace();

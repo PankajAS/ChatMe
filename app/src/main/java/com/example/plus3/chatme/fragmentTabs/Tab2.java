@@ -16,8 +16,11 @@ import com.example.plus3.chatme.R;
 import com.example.plus3.chatme.UserChat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,57 +46,95 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_tab2,container,false);
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        dRef = database.getReference("Users");
+
         Bundle b= getActivity().getIntent().getExtras();
         listView = (ListView) v.findViewById(R.id.list);
         listView.setDivider(null);
+
+        adapter = new ContactsListAdapter(getContext(),R.layout.userlist,map);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                callData(i);
+            }
+        });
+
+
+        return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         listArray = new ArrayList<>();
         listNumber = new ArrayList<>();
+        map = new HashMap<String, String>();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = database.getInstance();
+        dRef = database.getReference("Users");
+
+
         Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
         while(cursor.moveToNext()){
             try {
                 String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name=cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-              if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                  Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
-                  while (phones.moveToNext()) {
-                      String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                      map = new HashMap<String, String>();
-//                      map.put("name", name);
-//                      map.put("number", phoneNumber);
-                      contactData.add(map);
-                      listArray.add(name);
-                      listNumber.add(phoneNumber);
+                if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                    while (phones.moveToNext()) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                  }
-                  phones.close();
-              }
+                        map.put(phoneNumber, name);
+                        //contactData.add(map);
+                    }
+                    phones.close();
+                }
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
         }
 
+    }
 
-        adapter = new ContactsListAdapter(getContext(),R.layout.userlist,listArray,listNumber);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public void callData(final int i){
+        final Intent intent = new Intent(getContext(),UserChat.class);
+        dRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            String chatUser;
+            String UserName;
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                Intent intent = new Intent(getContext(),UserChat.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren()){
+                    if(data.child("Details").child("Phone").getValue().equals(new ArrayList<String>(map.keySet()).get(i))){
+                        if(!data.child("Details").child("UID").getValue().equals(user.getUid())){
+                            System.out.println(data.child("Details").child("UID").getValue().toString());
+                            UserName=data.child("Details").child("Name").getValue().toString();
+                            chatUser=data.child("Details").child("UID").getValue().toString();
+                        }
+                    }
+                }
                 //intent.putExtra("ChatUser", userKeys.get(i));
-                intent.putExtra("ChatUser", "");
-                intent.putExtra("UserName", listArray.get(i));
-                intent.putExtra("CurrentUser", listArray.get(i));
+                intent.putExtra("ChatUser", chatUser);
+                intent.putExtra("UserName", UserName);
+                intent.putExtra("CurrentUser", user.getUid());
                 startActivity(intent);
             }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
-        return v;
+
     }
 
 
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+    }
 }

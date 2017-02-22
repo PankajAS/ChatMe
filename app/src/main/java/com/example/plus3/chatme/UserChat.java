@@ -69,22 +69,7 @@ public class UserChat extends AppCompatActivity{
 
             @Override
             public void onClick(View arg0) {
-                String message = editText.getText().toString();
-                GregorianCalendar c = new GregorianCalendar();
-                c.setTime(new Date());
-                int hours = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
-                int sec = c.get(Calendar.SECOND);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-                int month = c.get(Calendar.MONTH);
-                int year = c.get(Calendar.YEAR);
-                String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
-
-                if(message !=null && !message.isEmpty()){
-                    databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
-                    databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
-                }
-                editText.setText("");
+                sendMessages();
             }
         });
 
@@ -128,6 +113,25 @@ public class UserChat extends AppCompatActivity{
         });
 
 
+    }
+
+    public void sendMessages() {
+        String message = editText.getText().toString();
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(new Date());
+        int hours = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int sec = c.get(Calendar.SECOND);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
+
+        if(message !=null && !message.isEmpty()){
+            databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
+            databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
+        }
+        editText.setText("");
     }
 
     private String getCurrentTime() {
