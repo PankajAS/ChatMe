@@ -53,6 +53,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);//selecting the selected tab as CHAT TAB
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(3);/* limit is a fixed integer (stop refreshing Fragments on tab change)*/
         tabLayout.setOnTabSelectedListener(this);
         Intent in = getIntent();
         CURRENT_USER = in.getStringExtra("UID");
