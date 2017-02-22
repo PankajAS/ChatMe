@@ -134,7 +134,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
     public void onBackPressed() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        intent.setFlags(Intent.FLAG_FROM_BACKGROUND);//***Change Here***
         startActivity(intent);
         finish();
         System.exit(0);
