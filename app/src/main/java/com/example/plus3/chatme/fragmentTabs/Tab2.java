@@ -102,33 +102,27 @@ public class Tab2 extends Fragment {
     public void callData(final int i){
         final Intent intent = new Intent(getContext(),UserChat.class);
         dRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            String chatUser;
-            String UserName;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data:dataSnapshot.getChildren()){
                     if(data.child("Details").child("Phone").getValue().equals(new ArrayList<String>(map.keySet()).get(i))){
                         if(!data.child("Details").child("UID").getValue().equals(user.getUid())){
                             System.out.println(data.child("Details").child("UID").getValue().toString());
-                            UserName=data.child("Details").child("Name").getValue().toString();
-                            chatUser=data.child("Details").child("UID").getValue().toString();
+
+                            intent.putExtra("ChatUser", data.child("Details").child("UID").getValue().toString());
+                            intent.putExtra("UserName", data.child("Details").child("Name").getValue().toString());
+                            intent.putExtra("CurrentUser", user.getUid());
+                            startActivity(intent);
                         }
                     }
                 }
-                //intent.putExtra("ChatUser", userKeys.get(i));
-                intent.putExtra("ChatUser", chatUser);
-                intent.putExtra("UserName", UserName);
-                intent.putExtra("CurrentUser", user.getUid());
-                startActivity(intent);
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
     }
 
 
