@@ -103,12 +103,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     @Override
-    public void onBackPressed(){
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_FROM_BACKGROUND);//***Change Here***
-        startActivity(intent);
-        finish();
-        System.exit(0);
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        switch(keyCode)
+        {
+            case KeyEvent.KEYCODE_BACK:
+
+                moveTaskToBack(true);
+
+                return true;
+        }
+        return false;
     }
 }
