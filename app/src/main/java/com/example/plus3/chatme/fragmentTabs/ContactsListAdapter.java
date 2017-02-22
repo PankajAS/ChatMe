@@ -42,11 +42,13 @@ public class ContactsListAdapter extends ArrayAdapter<String> {
             holder.numbers = (TextView) convertView.findViewById(R.id.lastmsg);
             holder.from = (TextView) convertView.findViewById(R.id.time);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageView1);
+            holder.v = (View) convertView.findViewById(R.id.listViewDivider);
 
             try{
                 holder.txtTitle.setText(new ArrayList<String>(map.values()).get(position));
                 holder.numbers.setText(new ArrayList<String>(map.keySet()).get(position));
                 holder.from.setText("Mobile");
+
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -62,5 +64,6 @@ public class ContactsListAdapter extends ArrayAdapter<String> {
     private class ViewHolder {
         TextView txtTitle, numbers, from;
         ImageView imageView;
+        View v;
     }
 }

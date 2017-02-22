@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -45,6 +46,7 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_tab2,container,false);
+
         Bundle b= getActivity().getIntent().getExtras();
         listView = (ListView) v.findViewById(R.id.list);
         listView.setDivider(null);

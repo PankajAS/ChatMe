@@ -43,12 +43,14 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
                 getString(R.string.Chats),
                 getString(R.string.Contacts)
         };
+
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText("Calls"));
         tabLayout.addTab(tabLayout.newTab().setText("Chats"));
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         //tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#ffffff"));
         viewPager = (ViewPager)findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
