@@ -139,5 +139,4 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         finish();
         System.exit(0);
     }
-
 }

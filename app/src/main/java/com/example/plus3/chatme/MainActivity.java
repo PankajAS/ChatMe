@@ -102,4 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
     }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_FROM_BACKGROUND);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
+    }
 }
