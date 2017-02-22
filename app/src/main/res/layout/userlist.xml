@@ -61,11 +61,12 @@
             tools:ignore="HardcodedText" />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
             android:layout_below="@+id/lastmsg"
             android:layout_marginTop="12dp"
             android:background="@color/common_google_signin_btn_text_dark_focused"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:layout_height="1px"
+            android:id="@+id/listViewDivider" />
 
     </RelativeLayout>
 

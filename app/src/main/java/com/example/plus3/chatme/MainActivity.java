@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button button;
     private Utils utils;
 
-
-
     public void login(View view){
         utils.hideSoftKeyboard(this);//hide keyboard after pressing login button
 
