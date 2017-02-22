@@ -106,9 +106,9 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.main_menu, menu);
-    return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -129,4 +129,15 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
+    }
+
 }
