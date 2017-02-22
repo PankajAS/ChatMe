@@ -4,11 +4,13 @@ package com.example.plus3.chatme;
  * Created by Ashok on 28/01/17.
  */
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
 import android.graphics.Canvas;
+import android.view.inputmethod.InputMethodManager;
 
 public class Utils
 {
@@ -25,6 +27,14 @@ public class Utils
 
         //imageView.setImageBitmap(circleBitmap);
         return circleBitmap;
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

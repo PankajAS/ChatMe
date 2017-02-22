@@ -1,10 +1,12 @@
 package com.example.plus3.chatme;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -32,10 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userId;
     private ProgressBar progressBar;
     private Button button;
+    private Utils utils;
 
 
 
     public void login(View view){
+        utils.hideSoftKeyboard(this);//hide keyboard after pressing login button
 
         String email = this.email.getText().toString();
         String passwords = password.getText().toString();
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myRef = database.getReference("Users");
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-
+        utils = new Utils();
 
         password.setOnKeyListener(this);
     }
