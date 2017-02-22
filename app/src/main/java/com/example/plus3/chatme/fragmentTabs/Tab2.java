@@ -2,6 +2,7 @@ package com.example.plus3.chatme.fragmentTabs;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -39,34 +40,14 @@ public class Tab2 extends Fragment {
     List<String> listArray, listNumber;
     ContactsListAdapter adapter;
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_tab2,container,false);
-
         Bundle b= getActivity().getIntent().getExtras();
         listView = (ListView) v.findViewById(R.id.list);
         listView.setDivider(null);
-
-        adapter = new ContactsListAdapter(getContext(),R.layout.userlist,map);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                callData(i);
-            }
-        });
-
-
-        return v;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         listArray = new ArrayList<>();
         listNumber = new ArrayList<>();
         map = new HashMap<String, String>();
@@ -75,27 +56,54 @@ public class Tab2 extends Fragment {
         database = database.getInstance();
         dRef = database.getReference("Users");
 
+        AsyncTask<Void,String,String> task = new AsyncTask<Void, String, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
+                while(cursor.moveToNext()){
+                    try {
+                        String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name=cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                            Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                            while (phones.moveToNext()) {
+                                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-        Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
-        while(cursor.moveToNext()){
-            try {
-                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name=cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
-                    while (phones.moveToNext()) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                        map.put(phoneNumber, name);
-                        //contactData.add(map);
+                                map.put(phoneNumber, name);
+                                //contactData.add(map);
+                            }
+                            phones.close();
+                        }
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
                     }
-                    phones.close();
                 }
-            }catch (Exception e){
-                System.out.println(e.getMessage());
+                return null;
             }
-        }
+
+            @Override
+            protected void onPostExecute(String s) {
+                adapter = new ContactsListAdapter(getContext(),R.layout.userlist,map);
+                listView.setAdapter(adapter);
+                super.onPostExecute(s);
+            }
+        };
+        task.execute();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                callData(i);
+            }
+        });
+
+        return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
     }
 

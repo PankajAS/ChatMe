@@ -3,6 +3,7 @@ package com.example.plus3.chatme;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public class UserList extends Fragment {
     String USER_NAME;
     Map<String, String> map;
     Map<String, Bitmap> pics;
+    CustomListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class UserList extends Fragment {
         pics = new HashMap<String,Bitmap>();
         final Map<String,String> lastmessages = new HashMap<>();
         final Map<String,String> time = new HashMap<>();
-        final CustomListAdapter adapter = new CustomListAdapter(getContext(),CURRENT_USER,lastmessages,map,pics,piclist,list);
+        adapter  = new CustomListAdapter(getContext(),CURRENT_USER,lastmessages,map,pics,piclist,list);
         listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
 
@@ -86,55 +88,10 @@ public class UserList extends Fragment {
             }
         });
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String key = null;
-                String val = null;
-                Bitmap pic = null;
-                try {
-                    for (DataSnapshot data1 : dataSnapshot.getChildren()) {
 
-                        if (!data1.getKey().equals(CURRENT_USER)) {
-                            userKeys.add(data1.getKey().toString());
-                            key = data1.getKey().toString();
-                        }
 
-                        if (!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
 
-                            if (data1.child("Details").child("Name").getKey().equals("Name")) {
-                                list.add(data1.child("Details").child("Name").getValue().toString());
-                                val = data1.child("Details").child("Name").getValue().toString();
-                            }
 
-                            if (data1.child("Details").child("pic").getKey().equals("pic")) {
-                                String base64Image = (String) data1.child("Details").child("pic").getValue();
-                                byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
-                                Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-                                piclist.add(image);
-                                pic = image;
-                            }
-
-                        }
-                        if (val != null && pic != null && key != null) {
-                            map.put(key, val);
-                            pics.put(key, pic);
-                        }
-                    }
-                }
-                catch(Exception ex)
-                {
-                    System.out.println(ex.getMessage());
-                    Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                //String value = (new ArrayList<String>(map.values().hashCode()).get(1));
-                adapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,7 +105,73 @@ public class UserList extends Fragment {
 
             }
         });
+
+        AsyncTask<Void,Void,String> task = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String key = null;
+                        String val = null;
+                        Bitmap pic = null;
+                        try {
+                            for (DataSnapshot data1 : dataSnapshot.getChildren()) {
+
+                                if (!data1.getKey().equals(CURRENT_USER)) {
+                                    userKeys.add(data1.getKey().toString());
+                                    key = data1.getKey().toString();
+                                }
+
+                                if (!data1.child("Details").child("Name").getValue().equals(USER_NAME)) {
+
+                                    if (data1.child("Details").child("Name").getKey().equals("Name")) {
+                                        list.add(data1.child("Details").child("Name").getValue().toString());
+                                        val = data1.child("Details").child("Name").getValue().toString();
+                                    }
+
+                                    if (data1.child("Details").child("pic").getKey().equals("pic")) {
+                                        String base64Image = (String) data1.child("Details").child("pic").getValue();
+                                        byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                                        Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                                        piclist.add(image);
+                                        pic = image;
+                                    }
+
+                                }
+                                if (val != null && pic != null && key != null) {
+                                    map.put(key, val);
+                                    pics.put(key, pic);
+                                }
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println(ex.getMessage());
+                            Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        //String value = (new ArrayList<String>(map.values().hashCode()).get(1));
+                        adapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                return null;
+            }
+        };
+        task.execute();
+
+
         return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+
+        super.onCreate(savedInstanceState);
     }
 
     public  void getCurrentUserName(){
