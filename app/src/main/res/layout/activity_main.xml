@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.plus3.chatme.MainActivity"
-    android:layout_margin="5dp"
-    android:scrollbars="horizontal|vertical">
+    android:scrollbars="horizontal|vertical"
+    android:background="@color/colorWhite">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,7 +20,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
 
             <EditText
                 android:layout_width="match_parent"
@@ -30,9 +31,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="31dp"
                 android:id="@+id/email"
-                android:hint=" email / mobile"
+                android:hint="Email"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                />
 
             <EditText
                 android:layout_width="match_parent"
@@ -44,7 +46,8 @@
                 android:layout_alignEnd="@+id/email"
                 android:layout_marginTop="27dp"
                 android:id="@+id/password"
-                android:hint="Password" />
+                android:hint="Password"
+                />
 
             <Button
                 android:text="Log In"
@@ -53,7 +56,9 @@
                 android:id="@+id/login"
                 android:onClick="login"
                 android:layout_below="@+id/password"
-                android:layout_marginTop="29dp" />
+                android:layout_marginTop="29dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorWhite" />
 
             <Button
                 android:text="Sign Up"
@@ -67,7 +72,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorWhite" />
 
             <ProgressBar
                 style="?android:attr/progressBarStyle"
