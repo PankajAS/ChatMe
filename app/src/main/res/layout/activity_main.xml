@@ -29,11 +29,11 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="31dp"
                 android:id="@+id/email"
                 android:hint="Email"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:background="@drawable/edittext_bg"
                 />
 
             <EditText
@@ -47,6 +47,7 @@
                 android:layout_marginTop="27dp"
                 android:id="@+id/password"
                 android:hint="Password"
+                android:background="@drawable/edittext_bg"
                 />
 
             <Button

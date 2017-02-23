@@ -13,13 +13,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollIndicators="none"
-        android:scrollbars="none">
+        android:scrollIndicators="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-           >
+            android:layout_gravity="center_vertical">
 
             <EditText
                 android:layout_width="match_parent"
@@ -27,7 +26,8 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/name"
-                android:hint="Name" />
+                android:hint="Name"
+                android:background="@drawable/edittext_bg" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -35,7 +35,9 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/phone"
-                android:hint="Phone" />
+                android:hint="Phone"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="30dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -43,7 +45,9 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/emailS"
-                android:hint="Email" />
+                android:hint="Email"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="30dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -51,7 +55,9 @@
                 android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/passwords"
-                android:hint="Password" />
+                android:hint="Password"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="30dp" />
 
             <Button
                 android:text="Sign Up"
