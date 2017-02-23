@@ -1,6 +1,8 @@
 package com.example.plus3.chatme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +40,11 @@ public class UserChat extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private List<Chat> mChats;
     private ChatAdapter mAdapter;
+    Chat model;
+    SharedPreferences pref, pref1;
+    SharedPreferences.Editor editor;
+
+
 
 
 
@@ -45,7 +52,7 @@ public class UserChat extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatinbox);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText = (EditText) findViewById(R.id.etText);
         button = (Button) findViewById(R.id.btSent);
         auth = FirebaseAuth.getInstance();
@@ -61,6 +68,9 @@ public class UserChat extends AppCompatActivity{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         databaseReference = database.getReference("Users").child(intent.getStringExtra("CurrentUser")).child("Messages").child(intent.getStringExtra("ChatUser"));
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
+        pref = getApplicationContext().getSharedPreferences("com.example.plus3.chatme", Context.MODE_PRIVATE);
+        editor  = pref.edit();
+
 
         mAdapter = new ChatAdapter(mChats,UserId);
         mRecyclerView.setAdapter(mAdapter);
@@ -73,6 +83,7 @@ public class UserChat extends AppCompatActivity{
             }
         });
 
+
         databaseReference.child("Inbox").addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -80,19 +91,21 @@ public class UserChat extends AppCompatActivity{
 
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     try{
-                        Chat model = dataSnapshot.getValue(Chat.class);
+                        model = dataSnapshot.getValue(Chat.class);
                         mChats.add(model);
                         mRecyclerView.scrollToPosition(mChats.size() -1);
                         mAdapter.notifyItemInserted(mChats.size() -1);
+                        editor.putString(model.getMessageBy(),model.getTime());
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
                 }
+
+                editor.commit();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
 
             }
 
@@ -111,8 +124,6 @@ public class UserChat extends AppCompatActivity{
 
             }
         });
-
-
     }
 
     public void sendMessages() {
@@ -127,10 +138,18 @@ public class UserChat extends AppCompatActivity{
         int year = c.get(Calendar.YEAR);
         String time = year + "" + month + "" + day + "" + hours + "" + minute + "" + sec;
 
+
         if(message !=null && !message.isEmpty()){
+
             databaseReference.child("Inbox").push().setValue(new Chat(time, message + "    " + getCurrentTime(), UserId));
             databaseReference2.child("Inbox").push().setValue(new Chat(time, message, UserId));
+           //System.out.println(new Chat(time, message + "    " + getCurrentTime(), UserId).getBody());
+            //Chat chat2 = new Chat(time, message + "    " + getCurrentTime(), UserId);
+            //editor.putString(chat2.getTime(), chat2.getMessageBy());
+            //editor.commit();
+
         }
+
         editText.setText("");
     }
 

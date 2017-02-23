@@ -1,6 +1,8 @@
 package com.example.plus3.chatme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -43,6 +45,7 @@ public class UserList extends Fragment {
     Map<String, String> map;
     Map<String, Bitmap> pics;
     CustomListAdapter adapter;
+    int count=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,21 +68,41 @@ public class UserList extends Fragment {
         adapter  = new CustomListAdapter(getContext(),CURRENT_USER,lastmessages,map,pics,piclist,list);
         listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
-
-
-        databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
+        final SharedPreferences pref1 = getContext().getSharedPreferences("com.example.plus3.chatme", Context.MODE_PRIVATE);
+        //System.out.println(pref1.getAll().keySet());
+       //last  [201711415568, 2017122175942, 2017122184818]
+        ValueEventListener messages = databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Chat chat = null;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    for(DataSnapshot data2:data.getChildren()) {
-                        for(DataSnapshot data3:data2.getChildren()) {
+                    for (DataSnapshot data2 : data.getChildren()) {
+                        for (DataSnapshot data3 : data2.getChildren()) {
                             chat = data3.getValue(Chat.class);
+
                         }
                         lastmessages.put(data.getKey(), chat.getBody());
                         time.put(data.getKey(), chat.getTime());
                     }
                 }
+                /*Iterator it = time.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry) it.next();
+                    //System.out.println(pair.getKey() + " = " + pair.getValue());
+                    Iterator it1 = pref1.getAll().entrySet().iterator();
+                    while (it1.hasNext()) {
+                        Map.Entry pair1 = (Map.Entry) it1.next();
+                        String value =  pair.getValue().toString();
+                        String value1 = pair1.getValue().toString();
+                            if (Long.parseLong(value) > Long.parseLong(value1)) {
+                                System.out.println(pair1.getKey());
+                            }
+
+                        it1.remove();
+                    }
+                    it.remove();
+
+                }*/
             }
 
             @Override
@@ -87,11 +110,6 @@ public class UserList extends Fragment {
 
             }
         });
-
-
-
-
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,6 +123,7 @@ public class UserList extends Fragment {
 
             }
         });
+
 
         AsyncTask<Void,Void,String> task = new AsyncTask<Void, Void, String>() {
             @Override
@@ -137,11 +156,12 @@ public class UserList extends Fragment {
                                         piclist.add(image);
                                         pic = image;
                                     }
-
                                 }
+
                                 if (val != null && pic != null && key != null) {
                                     map.put(key, val);
                                     pics.put(key, pic);
+
                                 }
                             }
                         }
@@ -152,6 +172,7 @@ public class UserList extends Fragment {
                         }
                         //String value = (new ArrayList<String>(map.values().hashCode()).get(1));
                         adapter.notifyDataSetChanged();
+
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -163,9 +184,10 @@ public class UserList extends Fragment {
         };
         task.execute();
 
-
         return v;
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

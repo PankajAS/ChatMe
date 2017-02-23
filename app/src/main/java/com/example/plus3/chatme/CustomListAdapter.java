@@ -20,6 +20,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     private final ArrayList<Bitmap> imgid;
     private ArrayList<String> names;
     private String CurrentUser;
+    //NotificationBadge mBadge;
 
     public CustomListAdapter(Context context, String CurrentUser, Map<String,String> lastmsg, Map<String,String> map, Map<String,Bitmap> pics, ArrayList<Bitmap> imgid, ArrayList<String> list) {
         super(context, R.layout.userlist, list);
@@ -40,8 +41,9 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         TextView lastmsgg = (TextView) rowView.findViewById(R.id.lastmsg);
         TextView time = (TextView) rowView.findViewById(R.id.time);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-
-
+        //mBadge = (NotificationBadge) rowView.findViewById(R.id.badge);
+        //mBadge.setNumber(10);
+        
         try {
             String ks = new ArrayList<String>(itemname.keySet()).get(position);
             txtTitle.setText(new ArrayList<String>(itemname.values()).get(position));
@@ -52,7 +54,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                         lastmsgg.setText(new ArrayList<String>(lastmsg.values()).get(position));
                 }
             }
-            //for(String timeKey:)
+
             time.setText("15/02/2017");
 
         } catch (Exception e) {
