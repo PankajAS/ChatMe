@@ -24,10 +24,14 @@ public class SingUpActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private ProgressBar progressBar;
+    private Utils utils;
 
     public void signUp(View v){
+
        if(!name.getText().toString().isEmpty() && !phone.getText().toString().isEmpty()
                 && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+
+           utils.hideSoftKeyboard(this);//hide keyboard
 
            progressBar.setVisibility(View.VISIBLE);
            String uemail = email.getText().toString();
@@ -83,6 +87,7 @@ public class SingUpActivity extends AppCompatActivity {
         myRef = database.getReference("Users");
         progressBar = (ProgressBar)findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
+        utils = new Utils();
 
 
     }

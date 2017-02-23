@@ -9,8 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.plus3.chatme.MainActivity"
-    android:scrollbars="horizontal|vertical"
-    android:background="@color/colorWhite">
+    android:scrollbars="horizontal|vertical">
 
     <ScrollView
         android:layout_width="match_parent"

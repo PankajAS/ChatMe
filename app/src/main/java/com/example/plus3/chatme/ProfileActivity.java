@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         utils = new Utils();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Update Profile");
         database = FirebaseDatabase.getInstance();
@@ -197,6 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateProfileInfo() {
+        utils.hideSoftKeyboard(this);//hide keyboard
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8; // shrink it down otherwise we will use stupid amounts of memory
