@@ -10,7 +10,7 @@
         android:layout_weight="1.01"
         android:layout_alignParentTop="true"
         android:id="@+id/rvChat"
-        android:background="@drawable/chat_background"
+        android:background="@color/colorWhite"
         android:layout_height="460dp"
         android:paddingBottom="10dp"
         android:layout_above="@+id/relativeLayout" />
@@ -22,7 +22,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:background="@android:color/white"
-        android:padding="5dp"
         android:id="@+id/relativeLayout"
         android:layout_alignParentLeft="true">
 
@@ -32,7 +31,10 @@
             android:id="@+id/etText"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/btSent" />
+            android:layout_toStartOf="@+id/btSent"
+            android:background="@drawable/edittext_bg"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -42,7 +44,12 @@
             android:id="@+id/btSent"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:textColor="@android:color/black"/>
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/roundedbutton"
+            android:textSize="18sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:minHeight="40dp" />
     </RelativeLayout>
 
 </RelativeLayout>
