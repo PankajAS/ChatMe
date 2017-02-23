@@ -31,6 +31,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         requestContactReadPermission();

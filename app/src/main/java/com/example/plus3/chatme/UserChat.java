@@ -52,7 +52,9 @@ public class UserChat extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatinbox);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText = (EditText) findViewById(R.id.etText);
         button = (Button) findViewById(R.id.btSent);
         auth = FirebaseAuth.getInstance();

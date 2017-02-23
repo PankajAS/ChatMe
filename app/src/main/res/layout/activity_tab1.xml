@@ -19,5 +19,6 @@
         android:layout_marginTop="206dp"
         android:id="@+id/textView"
         android:textSize="24sp"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:textColor="@color/cardview_shadow_start_color" />
 </RelativeLayout>

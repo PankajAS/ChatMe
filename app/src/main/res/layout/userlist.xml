@@ -47,7 +47,8 @@
             android:maxLines="1"
             android:layout_marginTop="10dp"
             tools:ignore="HardcodedText,ObsoleteLayoutParam"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorBlack" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,7 +61,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:id="@+id/lastmsg"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:textColor="@color/colorBlack" />
 
         <!--<com.nex3z.notificationbadge.NotificationBadge android:layout_height="28dp"
             android:layout_width="28dp"

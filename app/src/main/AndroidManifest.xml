@@ -32,7 +32,8 @@
         <activity android:name=".SingUpActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ChatInbox" />
-        <activity android:name=".TabViewActivity"/>
+        <activity android:name=".TabViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".fragmentTabs.Tab1" />
         <activity android:name=".fragmentTabs.Tab2" />
     </application>
