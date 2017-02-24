@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.plus3.chatme.fragmentTabs.Pager;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs.Pager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{

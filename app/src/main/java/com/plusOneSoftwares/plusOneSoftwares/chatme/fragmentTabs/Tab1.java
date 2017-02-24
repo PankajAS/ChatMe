@@ -1,4 +1,4 @@
-package com.example.plus3.chatme.fragmentTabs;
+package com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.plus3.chatme.R;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.R;
 
 public class Tab1 extends Fragment{
 

@@ -1,10 +1,10 @@
-package com.example.plus3.chatme.fragmentTabs;
+package com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.plus3.chatme.UserList;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.UserList;
 
 /**
  * Created by Plus 3 on 16-02-2017.

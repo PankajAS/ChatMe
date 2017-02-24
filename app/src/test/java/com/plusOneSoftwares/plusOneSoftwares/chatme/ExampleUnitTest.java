@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import org.junit.Test;
 

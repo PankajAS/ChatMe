@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:250442486006:android:d0b86b090fbf6f17",
         "android_client_info": {
-          "package_name": "com.example.plus3.chatme"
+          "package_name": "com.plusOneSoftwares.plusOneSoftwares.chatme"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "250442486006-ibjjklu4niovtciee07o5n2rf8ohns7l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.plus3.chatme",
+            "package_name": "com.plusOneSoftwares.plusOneSoftwares.chatme",
             "certificate_hash": "C09AFC4DB76A9B5B74BFE5DDA7AE669D83089FC5"
           }
         },
@@ -43,7 +43,7 @@
               "client_id": "250442486006-0teeqlhq29e2uvbpvapfpevu4gkemrto.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.plus3.chatme"
+                "bundle_id": "com.plusOneSoftwares.plusOneSoftwares.chatme"
               }
             },
             {

@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.plus3.chatme", appContext.getPackageName());
+        assertEquals("com.plusOneSoftwares.plusOneSoftwares.chatme", appContext.getPackageName());
     }
 }

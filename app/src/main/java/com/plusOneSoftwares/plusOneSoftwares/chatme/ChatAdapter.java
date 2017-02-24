@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.plus3.chatme.fragmentTabs;
+package com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,10 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.plus3.chatme.R;
-import com.example.plus3.chatme.UserChat;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.R;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.UserChat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
