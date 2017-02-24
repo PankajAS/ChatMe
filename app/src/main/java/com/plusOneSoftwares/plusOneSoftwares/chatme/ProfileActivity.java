@@ -56,8 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         utils = new Utils();
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Update Profile");
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
