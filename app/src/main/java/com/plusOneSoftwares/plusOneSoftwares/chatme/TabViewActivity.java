@@ -3,6 +3,7 @@ package com.plusOneSoftwares.plusOneSoftwares.chatme;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -31,7 +32,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         setSupportActionBar(toolbar);
 
         requestContactReadPermission();
