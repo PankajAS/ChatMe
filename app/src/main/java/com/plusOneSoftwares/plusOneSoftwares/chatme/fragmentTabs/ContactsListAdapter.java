@@ -1,4 +1,4 @@
-package com.example.plus3.chatme.fragmentTabs;
+package com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.plus3.chatme.R;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

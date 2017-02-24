@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.content.Context;
 import android.content.Intent;
@@ -70,7 +70,7 @@ public class UserChat extends AppCompatActivity{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         databaseReference = database.getReference("Users").child(intent.getStringExtra("CurrentUser")).child("Messages").child(intent.getStringExtra("ChatUser"));
         databaseReference2 = database.getReference("Users").child(intent.getStringExtra("ChatUser")).child("Messages").child(intent.getStringExtra("CurrentUser"));
-        pref = getApplicationContext().getSharedPreferences("com.example.plus3.chatme", Context.MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("com.plusOneSoftwares.plusOneSoftwares.chatme", Context.MODE_PRIVATE);
         editor  = pref.edit();
 
 

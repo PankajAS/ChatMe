@@ -1,8 +1,9 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -16,7 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.plus3.chatme.fragmentTabs.Pager;
+import com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs.Pager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
@@ -31,7 +32,7 @@ public class TabViewActivity extends AppCompatActivity implements TabLayout.OnTa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        //toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         setSupportActionBar(toolbar);
 
         requestContactReadPermission();

@@ -1,4 +1,4 @@
-package com.example.plus3.chatme;
+package com.plusOneSoftwares.plusOneSoftwares.chatme;
 
 import android.content.Context;
 import android.content.Intent;
@@ -68,7 +68,7 @@ public class UserList extends Fragment {
         adapter  = new CustomListAdapter(getContext(),CURRENT_USER,lastmessages,map,pics,piclist,list);
         listView.setAdapter(adapter);
         userKeys  = new ArrayList<>();
-        final SharedPreferences pref1 = getContext().getSharedPreferences("com.example.plus3.chatme", Context.MODE_PRIVATE);
+        final SharedPreferences pref1 = getContext().getSharedPreferences("com.plusOneSoftwares.plusOneSoftwares.chatme", Context.MODE_PRIVATE);
         //System.out.println(pref1.getAll().keySet());
        //last  [201711415568, 2017122175942, 2017122184818]
         ValueEventListener messages = databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
