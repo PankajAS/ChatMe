@@ -4,7 +4,7 @@
     android:id="@+id/activity_user_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.plus3.chatme.UserList"
+    tools:context="com.plusOneSoftwares.plusOneSoftwares.chatme.UserList"
     android:background="@color/colorWhite">
 
     <ListView

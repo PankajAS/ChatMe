@@ -19,23 +19,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".UserList" />
-        <activity android:name=".UserChat" />
-        <activity android:name=".SingUpActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ChatInbox" />
-        <activity android:name=".TabViewActivity"
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.MainActivity" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.UserList" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.UserChat" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.SingUpActivity" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.ProfileActivity" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.ChatInbox" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.TabViewActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".fragmentTabs.Tab1" />
-        <activity android:name=".fragmentTabs.Tab2" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs.Tab1" />
+        <activity android:name="com.plusOneSoftwares.plusOneSoftwares.chatme.fragmentTabs.Tab2" />
     </application>
 
 </manifest>
