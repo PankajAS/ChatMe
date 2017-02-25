@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,9 +72,8 @@ public class UserList extends Fragment {
         final SharedPreferences pref1 = getContext().getSharedPreferences("com.plusOneSoftwares.plusOneSoftwares.chatme", Context.MODE_PRIVATE);
         //System.out.println(pref1.getAll().keySet());
        //last  [201711415568, 2017122175942, 2017122184818]
-        time = 3242342432432;
-        Timestamp timestamp = new Timestamp(time);
-        ValueEventListener messages = databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
+
+       databaseReference.child(CURRENT_USER).child("Messages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Chat chat = null;
